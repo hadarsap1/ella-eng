@@ -1,0 +1,58 @@
+import type { GameInfo } from '../types/game';
+
+export const games: GameInfo[] = [
+  {
+    id: 'planet-of-words',
+    name: 'Planet of Words',
+    nameHe: 'כוכב המילים',
+    description: 'שמע מילה ובחר את התרגום הנכון',
+    icon: '🪐',
+    color: '#00d4ff',
+    minWords: 4,
+  },
+  {
+    id: 'memory-nebula',
+    name: 'Memory Nebula',
+    nameHe: 'ערפילית הזיכרון',
+    description: 'התאם מילים באנגלית לעברית',
+    icon: '🌀',
+    color: '#b44dff',
+    minWords: 6,
+  },
+  {
+    id: 'sound-twins',
+    name: 'Sound Twins',
+    nameHe: 'תאומי הצליל',
+    description: 'שמע מילה וזהה איזו נשמעה',
+    icon: '👯',
+    color: '#ff4d8d',
+    minWords: 4,
+  },
+  {
+    id: 'sentence-station',
+    name: 'Sentence Station',
+    nameHe: 'תחנת המשפטים',
+    description: 'סדר מילים למשפט נכון',
+    icon: '🚉',
+    color: '#00ff88',
+    minWords: 3,
+  },
+  {
+    id: 'listening-asteroid',
+    name: 'Listening Asteroid',
+    nameHe: 'אסטרואיד ההאזנה',
+    description: 'שמע מילה וכתוב אותה אות אות',
+    icon: '🌠',
+    color: '#ffd700',
+    minWords: 4,
+  },
+  {
+    id: 'word-builder',
+    name: 'Word Builder Rocket',
+    nameHe: 'רקטת בניית המילים',
+    description: 'בנה מילים מאותיות מרחפות',
+    icon: '🚀',
+    color: '#ff6b35',
+    minWords: 4,
+  },
+];
