@@ -12,29 +12,29 @@ interface Props {
 }
 
 const variants = {
-  primary: 'bg-neon-blue/20 border-neon-blue/50 text-neon-blue hover:bg-neon-blue/30 box-glow-blue',
-  secondary: 'bg-neon-purple/20 border-neon-purple/50 text-neon-purple hover:bg-neon-purple/30 box-glow-purple',
-  success: 'bg-neon-green/20 border-neon-green/50 text-neon-green hover:bg-neon-green/30 box-glow-green',
-  danger: 'bg-neon-pink/20 border-neon-pink/50 text-neon-pink hover:bg-neon-pink/30',
-  ghost: 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10',
+  primary: 'ella-btn-blue',
+  secondary: 'ella-btn-purple',
+  success: 'ella-btn-green',
+  danger: 'ella-btn-coral',
+  ghost: 'ella-btn-ghost',
 };
 
 const sizes = {
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-5 py-2.5 text-base',
-  lg: 'px-8 py-4 text-lg',
+  sm: 'px-5 py-2.5 text-sm rounded-xl',
+  md: 'px-7 py-3.5 text-base rounded-2xl',
+  lg: 'px-9 py-4.5 text-lg rounded-2xl',
 };
 
 export function SpaceButton({ variant = 'primary', size = 'md', className, children, onClick, disabled }: Props) {
   return (
     <motion.button
-      whileHover={disabled ? {} : { scale: 1.03 }}
+      whileHover={disabled ? {} : { scale: 1.03, y: -1 }}
       whileTap={disabled ? {} : { scale: 0.97 }}
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'rounded-xl border font-semibold transition-colors cursor-pointer font-hebrew',
-        'disabled:opacity-40 disabled:cursor-not-allowed',
+        'ella-btn font-bold cursor-pointer font-hebrew tracking-wide',
+        'disabled:opacity-25 disabled:cursor-not-allowed disabled:shadow-none',
         variants[variant],
         sizes[size],
         className

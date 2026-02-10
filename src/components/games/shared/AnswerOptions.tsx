@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { cn } from '../../../lib/cn';
 
 interface Props {
   options: { label: string; value: string }[];
@@ -11,30 +10,36 @@ interface Props {
 
 export function AnswerOptions({ options, onSelect, selected, correctAnswer, disabled }: Props) {
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-2 gap-3 sm:gap-4">
       {options.map((opt, i) => {
         const isSelected = selected === opt.value;
         const isCorrect = correctAnswer === opt.value;
         const showResult = selected !== null;
 
+        let cls = 'option-card';
+        if (showResult && isCorrect) cls = 'option-correct';
+        else if (showResult && isSelected && !isCorrect) cls = 'option-wrong';
+        else if (showResult && !isSelected && !isCorrect) cls = 'option-dimmed';
+
         return (
           <motion.button
             key={opt.value}
-            initial={{ y: 20, opacity: 0 }}
+            initial={{ y: 25, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: i * 0.1 }}
-            whileHover={disabled ? {} : { scale: 1.03 }}
-            whileTap={disabled ? {} : { scale: 0.97 }}
+            transition={{ delay: i * 0.07, type: 'spring', damping: 14 }}
+            whileHover={disabled ? {} : { scale: 1.04, y: -4 }}
+            whileTap={disabled ? {} : { scale: 0.95 }}
             onClick={() => !disabled && onSelect(opt.value)}
             disabled={disabled}
-            className={cn(
-              'p-4 rounded-xl border-2 text-lg font-semibold transition-all cursor-pointer',
-              'font-hebrew text-right',
-              showResult && isCorrect && 'bg-neon-green/20 border-neon-green text-neon-green',
-              showResult && isSelected && !isCorrect && 'bg-neon-pink/20 border-neon-pink text-neon-pink',
-              !showResult && 'bg-space-light/50 border-white/10 text-white hover:border-neon-blue/30 hover:bg-space-light/70',
-              showResult && !isSelected && !isCorrect && 'opacity-40',
-            )}
+            className={`${cls} py-6 sm:py-7 px-4 font-bold text-xl sm:text-2xl cursor-pointer font-hebrew text-center flex items-center justify-center`}
+            style={showResult && isCorrect
+              ? { color: '#34D399' }
+              : showResult && isSelected && !isCorrect
+              ? { color: '#F472B6' }
+              : showResult
+              ? { color: 'rgba(255,255,255,0.15)' }
+              : { color: 'rgba(255,255,255,0.9)' }
+            }
           >
             {opt.label}
           </motion.button>

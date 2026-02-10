@@ -9,7 +9,7 @@ import { usePlayerStore } from '../../../stores/usePlayerStore';
 import { GameHeader } from '../shared/GameHeader';
 import { FeedbackOverlay } from '../shared/FeedbackOverlay';
 import { GameComplete } from '../shared/GameComplete';
-import { cn } from '../../../lib/cn';
+
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -149,7 +149,7 @@ export function WordBuilder() {
   if (!currentWord) return null;
 
   return (
-    <div className="max-w-lg mx-auto p-6 relative z-10">
+    <div className="game-screen">
       <GameHeader title="רקטת בניית המילים" icon="🚀" current={index} total={total} streak={streak} />
 
       {/* Rocket */}
@@ -161,11 +161,11 @@ export function WordBuilder() {
         >
           <div className="text-6xl">🚀</div>
           {/* Fuel gauge */}
-          <div className="w-4 h-20 bg-white/10 rounded-full mx-auto mt-1 overflow-hidden">
+          <div className="w-4 h-20 rounded-full mx-auto mt-1 overflow-hidden relative" style={{ background: 'rgba(255,255,255,0.06)', boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.4)' }}>
             <motion.div
-              className="w-full bg-gradient-to-t from-neon-gold to-neon-green rounded-full"
+              className="w-full rounded-full absolute bottom-0 left-0 right-0"
               animate={{ height: `${rocketProgress * 100}%` }}
-              style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
+              style={{ background: 'linear-gradient(to top, #FBBF24, #34D399)' }}
             />
           </div>
         </motion.div>
@@ -189,10 +189,12 @@ export function WordBuilder() {
           return (
             <div
               key={i}
-              className={cn(
-                'w-10 h-12 rounded-lg border-2 flex items-center justify-center text-xl font-english font-bold',
-                filled ? 'bg-neon-green/20 border-neon-green text-neon-green' : 'bg-space-light/30 border-white/20 text-white/20',
-              )}
+              className="w-10 h-12 rounded-xl border-2 flex items-center justify-center text-xl font-english font-bold transition-all"
+              style={
+                filled
+                  ? { background: 'linear-gradient(165deg, rgba(52,211,153,0.2), rgba(16,185,129,0.12))', borderColor: 'rgba(52,211,153,0.5)', color: '#34D399', boxShadow: '0 4px 16px rgba(52,211,153,0.1)' }
+                  : { background: 'linear-gradient(165deg, rgba(35,46,90,0.6), rgba(22,30,66,0.7))', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.2)', boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.3)' }
+              }
             >
               {filled ? placed[i] : '?'}
             </div>
@@ -201,7 +203,14 @@ export function WordBuilder() {
       </div>
 
       {/* Floating fuel cells */}
-      <div className="relative h-48 bg-space-light/20 rounded-2xl border border-white/5 overflow-hidden">
+      <div
+        className="relative h-48 rounded-2xl overflow-hidden"
+        style={{
+          background: 'linear-gradient(165deg, rgba(35,46,90,0.5) 0%, rgba(22,30,66,0.6) 100%)',
+          border: '1.5px solid rgba(255,255,255,0.07)',
+          boxShadow: 'inset 0 4px 20px rgba(0,0,0,0.3)',
+        }}
+      >
         <AnimatePresence>
           {cells.map(cell => (
             <motion.button
@@ -221,8 +230,15 @@ export function WordBuilder() {
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.8 }}
               onClick={() => handleCellClick(cell)}
-              className="absolute w-11 h-11 rounded-full bg-neon-blue/20 border-2 border-neon-blue/50 flex items-center justify-center font-english font-bold text-lg text-neon-blue hover:bg-neon-blue/30 cursor-pointer"
-              style={{ left: `${cell.x}%`, top: `${cell.y}%` }}
+              className="absolute w-11 h-11 rounded-full flex items-center justify-center font-english font-bold text-lg cursor-pointer"
+              style={{
+                left: `${cell.x}%`,
+                top: `${cell.y}%`,
+                background: 'linear-gradient(165deg, rgba(91,155,245,0.2), rgba(59,114,219,0.12))',
+                border: '2px solid rgba(91,155,245,0.35)',
+                color: '#5B9BF5',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.25), 0 0 12px rgba(91,155,245,0.1)',
+              }}
             >
               {cell.letter}
             </motion.button>

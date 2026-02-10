@@ -9,7 +9,7 @@ import { usePlayerStore } from '../../../stores/usePlayerStore';
 import { GameHeader } from '../shared/GameHeader';
 import { FeedbackOverlay } from '../shared/FeedbackOverlay';
 import { GameComplete } from '../shared/GameComplete';
-import { cn } from '../../../lib/cn';
+
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -130,22 +130,38 @@ export function SentenceStation() {
   if (!currentSentence) return null;
 
   return (
-    <div className="max-w-lg mx-auto p-6 relative z-10">
+    <div className="game-screen">
       <GameHeader title="תחנת המשפטים" icon="🚉" current={index} total={total} streak={streak} />
 
       <div className="text-center mb-6">
-        <button
+        <motion.button
+          key={index}
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
           onClick={() => speakWord(currentSentence.english)}
-          className="inline-flex items-center gap-2 text-neon-green hover:text-neon-green/80 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-3 px-8 py-5 rounded-2xl cursor-pointer group transition-all duration-200"
+          style={{
+            background: 'linear-gradient(165deg, rgba(52,211,153,0.12), rgba(16,185,129,0.06))',
+            border: '1.5px solid rgba(52,211,153,0.2)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+          }}
         >
-          <Volume2 className="w-5 h-5" />
-        </button>
-        <p className="text-lg font-hebrew text-white/70 mt-2">{currentSentence.hebrew}</p>
-        <p className="text-sm text-white/40 font-hebrew mt-1">סדר את המילים למשפט נכון באנגלית</p>
+          <Volume2 className="w-8 h-8 text-neon-green/60 group-hover:text-neon-green group-hover:scale-110 transition-all" />
+          <span className="text-white/40 font-hebrew font-medium">🔊 שמע את המשפט</span>
+        </motion.button>
+        <p className="text-lg font-hebrew text-white/70 mt-3">{currentSentence.hebrew}</p>
+        <p className="text-sm text-white/25 font-hebrew mt-1 font-medium">🚉 סדר את המילים למשפט נכון באנגלית</p>
       </div>
 
       {/* Placed words area */}
-      <div className="min-h-16 p-3 rounded-xl border-2 border-dashed border-white/20 bg-space-light/30 mb-4 flex flex-wrap gap-2 items-center justify-center">
+      <div
+        className="min-h-16 p-4 rounded-2xl border-2 border-dashed mb-4 flex flex-wrap gap-2 items-center justify-center"
+        style={{
+          background: 'linear-gradient(145deg, rgba(30,38,80,0.6) 0%, rgba(15,21,53,0.7) 100%)',
+          borderColor: 'rgba(255,255,255,0.15)',
+          boxShadow: 'inset 0 2px 15px rgba(0,0,0,0.3)',
+        }}
+      >
         <AnimatePresence mode="popLayout">
           {placed.length === 0 ? (
             <span className="text-white/20 font-hebrew text-sm">גרור מילים לכאן</span>
@@ -158,12 +174,14 @@ export function SentenceStation() {
                 animate={{ scale: 1 }}
                 exit={{ scale: 0 }}
                 onClick={() => handleWordClick(word, true)}
-                className={cn(
-                  'px-4 py-2 rounded-lg font-english font-semibold cursor-pointer transition-colors',
-                  checked && isCorrectFeedback && 'bg-neon-green/20 border border-neon-green text-neon-green',
-                  checked && !isCorrectFeedback && 'bg-neon-pink/20 border border-neon-pink text-neon-pink',
-                  !checked && 'bg-neon-blue/20 border border-neon-blue/50 text-neon-blue',
-                )}
+                className="px-4 py-2 rounded-lg font-english font-semibold cursor-pointer transition-all"
+                style={
+                  checked && isCorrectFeedback
+                    ? { background: 'linear-gradient(165deg, rgba(52,211,153,0.2), rgba(16,185,129,0.12))', border: '1.5px solid rgba(52,211,153,0.5)', color: '#34D399', boxShadow: '0 4px 16px rgba(52,211,153,0.12)' }
+                    : checked && !isCorrectFeedback
+                    ? { background: 'linear-gradient(165deg, rgba(244,114,182,0.2), rgba(236,72,153,0.12))', border: '1.5px solid rgba(244,114,182,0.5)', color: '#F472B6', boxShadow: '0 4px 16px rgba(244,114,182,0.12)' }
+                    : { background: 'linear-gradient(165deg, rgba(91,155,245,0.15), rgba(59,114,219,0.08))', border: '1.5px solid rgba(91,155,245,0.35)', color: '#5B9BF5', boxShadow: '0 4px 16px rgba(0,0,0,0.25)' }
+                }
               >
                 {word}
               </motion.button>
@@ -185,7 +203,12 @@ export function SentenceStation() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => handleWordClick(word, false)}
-              className="px-4 py-2 rounded-lg bg-space-light/50 border border-white/10 font-english font-semibold text-white/80 hover:border-neon-green/30 cursor-pointer transition-colors"
+              className="px-4 py-2 rounded-lg font-english font-semibold text-white/80 cursor-pointer transition-all hover:scale-105"
+              style={{
+                background: 'linear-gradient(145deg, rgba(30,38,80,0.8), rgba(15,21,53,0.9))',
+                border: '1.5px solid rgba(255,255,255,0.1)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+              }}
             >
               {word}
             </motion.button>
@@ -201,7 +224,7 @@ export function SentenceStation() {
         >
           <button
             onClick={handleCheck}
-            className="px-8 py-3 rounded-xl bg-neon-green/20 border border-neon-green/50 text-neon-green font-hebrew font-semibold hover:bg-neon-green/30 transition-colors cursor-pointer"
+            className="ella-btn ella-btn-green px-8 py-3 font-hebrew"
           >
             ✓ בדוק
           </button>

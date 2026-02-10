@@ -20,15 +20,12 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-function pickRound(words: Word[]): { target: Word; options: { label: string; value: string }[] } {
-  const shuffled = shuffle(words);
-  const target = shuffled[0];
-  const distractors = shuffled.filter(w => w.english !== target.english).slice(0, 3);
-  const options = shuffle([target, ...distractors]).map(w => ({
+function makeOptions(target: Word, allWords: Word[]): { label: string; value: string }[] {
+  const distractors = shuffle(allWords.filter(w => w.english !== target.english)).slice(0, 3);
+  return shuffle([target, ...distractors]).map(w => ({
     label: w.hebrew,
     value: w.english,
   }));
-  return { target, options };
 }
 
 const ROUNDS = 10;
@@ -41,7 +38,7 @@ export function PlanetOfWords() {
 
   const [roundWords] = useState(() => shuffle(words).slice(0, ROUNDS));
   const [index, setIndex] = useState(0);
-  const [round, setRound] = useState(() => pickRound(words));
+  const [options, setOptions] = useState(() => makeOptions(roundWords[0], words));
   const [selected, setSelected] = useState<string | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrectFeedback, setIsCorrectFeedback] = useState(false);
@@ -55,7 +52,7 @@ export function PlanetOfWords() {
   } | null>(null);
 
   const total = Math.min(ROUNDS, words.length);
-  const currentWord = roundWords[index] || round.target;
+  const currentWord = roundWords[index];
 
   useEffect(() => {
     if (!complete && currentWord) {
@@ -79,9 +76,9 @@ export function PlanetOfWords() {
       setResultData({ ...res, xpEarned });
       setComplete(true);
     } else {
-      const newRound = pickRound(words);
-      setRound(newRound);
-      setIndex(i => i + 1);
+      const nextIndex = index + 1;
+      setOptions(makeOptions(roundWords[nextIndex], words));
+      setIndex(nextIndex);
       setSelected(null);
     }
   }, [index, total, correct, maxStreak, wordsPlayed, words, addGameResult]);
@@ -127,34 +124,45 @@ export function PlanetOfWords() {
   }
 
   return (
-    <div className="max-w-lg mx-auto p-6 relative z-10">
+    <div className="game-screen">
       <GameHeader title="כוכב המילים" icon="🪐" current={index} total={total} streak={streak} />
 
+      {/* Word display — the hero of the screen */}
       <motion.div
         key={index}
-        initial={{ x: 50, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        className="text-center mb-8"
+        initial={{ scale: 0.85, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: 'spring', damping: 14 }}
+        className="flex-1 flex flex-col items-center justify-center"
       >
-        <button
+        <motion.button
           onClick={() => speakWord(currentWord.english)}
-          className="inline-flex items-center gap-3 px-8 py-6 rounded-2xl bg-space-light/50 border border-neon-blue/20 hover:bg-space-light/70 transition-colors cursor-pointer"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          className="game-word-display group cursor-pointer mb-3"
         >
-          <Volume2 className="w-8 h-8 text-neon-blue" />
-          <span className="text-4xl font-english font-bold text-neon-blue">
-            {currentWord.english}
-          </span>
-        </button>
-        <p className="text-white/40 text-sm mt-3 font-hebrew">בחר את התרגום הנכון</p>
+          <div className="flex items-center gap-5">
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/[0.06] group-hover:bg-white/[0.1] transition-colors">
+              <Volume2 className="w-7 h-7 text-neon-blue/60 group-hover:text-neon-blue transition-colors" />
+            </div>
+            <span className="text-5xl sm:text-7xl font-english font-extrabold text-gradient-blue leading-none">
+              {currentWord.english}
+            </span>
+          </div>
+        </motion.button>
+        <p className="text-white/25 text-sm font-hebrew font-medium">🎯 בחר את התרגום הנכון</p>
       </motion.div>
 
-      <AnswerOptions
-        options={round.options}
-        onSelect={handleSelect}
-        selected={selected}
-        correctAnswer={selected ? currentWord.english : null}
-        disabled={selected !== null}
-      />
+      {/* Answer options — big, chunky, filling bottom */}
+      <div className="pb-2">
+        <AnswerOptions
+          options={options}
+          onSelect={handleSelect}
+          selected={selected}
+          correctAnswer={selected ? currentWord.english : null}
+          disabled={selected !== null}
+        />
+      </div>
 
       <FeedbackOverlay show={showFeedback} correct={isCorrectFeedback} />
     </div>

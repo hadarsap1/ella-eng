@@ -7,7 +7,7 @@ export const games: GameInfo[] = [
     nameHe: 'כוכב המילים',
     description: 'שמע מילה ובחר את התרגום הנכון',
     icon: '🪐',
-    color: '#00d4ff',
+    color: '#5B9BF5',
     minWords: 4,
   },
   {
@@ -16,7 +16,7 @@ export const games: GameInfo[] = [
     nameHe: 'ערפילית הזיכרון',
     description: 'התאם מילים באנגלית לעברית',
     icon: '🌀',
-    color: '#b44dff',
+    color: '#A78BFA',
     minWords: 6,
   },
   {
@@ -25,7 +25,7 @@ export const games: GameInfo[] = [
     nameHe: 'תאומי הצליל',
     description: 'שמע מילה וזהה איזו נשמעה',
     icon: '👯',
-    color: '#ff4d8d',
+    color: '#F472B6',
     minWords: 4,
   },
   {
@@ -34,7 +34,7 @@ export const games: GameInfo[] = [
     nameHe: 'תחנת המשפטים',
     description: 'סדר מילים למשפט נכון',
     icon: '🚉',
-    color: '#00ff88',
+    color: '#34D399',
     minWords: 3,
   },
   {
@@ -43,7 +43,7 @@ export const games: GameInfo[] = [
     nameHe: 'אסטרואיד ההאזנה',
     description: 'שמע מילה וכתוב אותה אות אות',
     icon: '🌠',
-    color: '#ffd700',
+    color: '#FBBF24',
     minWords: 4,
   },
   {
@@ -52,7 +52,7 @@ export const games: GameInfo[] = [
     nameHe: 'רקטת בניית המילים',
     description: 'בנה מילים מאותיות מרחפות',
     icon: '🚀',
-    color: '#ff6b35',
+    color: '#FB923C',
     minWords: 4,
   },
 ];

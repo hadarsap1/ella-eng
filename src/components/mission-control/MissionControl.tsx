@@ -1,7 +1,5 @@
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
 import { usePlayerStore } from '../../stores/usePlayerStore';
 import { getLevel, getLevelProgress, getNextLevel } from '../../data/levels';
 import { games } from '../../data/games';
@@ -10,20 +8,33 @@ import { SpaceCard } from '../ui/SpaceCard';
 import { GlowText } from '../ui/GlowText';
 import type { GameId } from '../../types/game';
 
+const avatars = ['🧑‍🚀', '👩‍🚀', '👨‍🚀', '🤖', '👽', '🦊'];
+
 function BarChart({ data }: { data: { label: string; value: number; color: string }[] }) {
   const max = Math.max(...data.map(d => d.value), 1);
+  if (data.length === 0) return <p className="text-center text-white/20 text-sm font-hebrew py-8">אין נתונים עדיין</p>;
   return (
-    <svg viewBox="0 0 300 150" className="w-full">
+    <svg viewBox="0 0 300 160" className="w-full">
+      {/* Grid lines */}
+      {[0, 0.25, 0.5, 0.75, 1].map(pct => (
+        <line key={pct} x1={0} x2={300} y1={130 - pct * 110} y2={130 - pct * 110} stroke="white" strokeOpacity={0.04} />
+      ))}
       {data.map((d, i) => {
-        const barWidth = 300 / data.length - 8;
-        const x = i * (300 / data.length) + 4;
+        const barWidth = Math.min(300 / data.length - 10, 40);
+        const x = i * (300 / data.length) + (300 / data.length - barWidth) / 2;
         const height = (d.value / max) * 110;
         const y = 130 - height;
         return (
           <g key={d.label}>
-            <rect x={x} y={y} width={barWidth} height={height} rx={4} fill={d.color} opacity={0.7} />
-            <text x={x + barWidth / 2} y={145} textAnchor="middle" fill="white" opacity={0.5} fontSize={9} fontFamily="Rubik">{d.label}</text>
-            <text x={x + barWidth / 2} y={y - 4} textAnchor="middle" fill="white" opacity={0.7} fontSize={10} fontFamily="Fredoka">{d.value}</text>
+            <defs>
+              <linearGradient id={`bar-${i}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={d.color} stopOpacity={0.9} />
+                <stop offset="100%" stopColor={d.color} stopOpacity={0.4} />
+              </linearGradient>
+            </defs>
+            <rect x={x} y={y} width={barWidth} height={height} rx={6} fill={`url(#bar-${i})`} />
+            <text x={x + barWidth / 2} y={150} textAnchor="middle" fill="white" opacity={0.4} fontSize={14}>{d.label}</text>
+            <text x={x + barWidth / 2} y={y - 6} textAnchor="middle" fill={d.color} fontSize={11} fontFamily="Quicksand" fontWeight="bold">{d.value}</text>
           </g>
         );
       })}
@@ -32,20 +43,21 @@ function BarChart({ data }: { data: { label: string; value: number; color: strin
 }
 
 function DonutChart({ value, label, color }: { value: number; label: string; color: string }) {
-  const r = 40;
+  const r = 42;
   const circ = 2 * Math.PI * r;
   const offset = circ * (1 - value / 100);
   return (
     <div className="text-center">
-      <svg viewBox="0 0 100 100" className="w-28 h-28 mx-auto">
-        <circle cx={50} cy={50} r={r} fill="none" stroke="white" strokeOpacity={0.1} strokeWidth={8} />
+      <svg viewBox="0 0 100 100" className="w-32 h-32 mx-auto" style={{ filter: `drop-shadow(0 0 8px ${color}30)` }}>
+        <circle cx={50} cy={50} r={r} fill="none" stroke="white" strokeOpacity={0.06} strokeWidth={6} />
         <circle
-          cx={50} cy={50} r={r} fill="none" stroke={color} strokeWidth={8}
+          cx={50} cy={50} r={r} fill="none" stroke={color} strokeWidth={6}
           strokeDasharray={circ} strokeDashoffset={offset}
           strokeLinecap="round" transform="rotate(-90 50 50)"
+          style={{ transition: 'stroke-dashoffset 1s ease-out' }}
         />
-        <text x={50} y={48} textAnchor="middle" fill="white" fontSize={18} fontFamily="Fredoka" fontWeight="bold">{value}%</text>
-        <text x={50} y={62} textAnchor="middle" fill="white" opacity={0.5} fontSize={9} fontFamily="Rubik">{label}</text>
+        <text x={50} y={46} textAnchor="middle" fill={color} fontSize={20} fontFamily="Quicksand" fontWeight="bold">{value}%</text>
+        <text x={50} y={62} textAnchor="middle" fill="white" opacity={0.4} fontSize={9} fontFamily="Rubik">{label}</text>
       </svg>
     </div>
   );
@@ -53,7 +65,6 @@ function DonutChart({ value, label, color }: { value: number; label: string; col
 
 export function MissionControl() {
   const player = usePlayerStore(s => s.activePlayer());
-  const navigate = useNavigate();
 
   const stats = useMemo(() => {
     if (!player) return null;
@@ -83,7 +94,7 @@ export function MissionControl() {
 
   if (!player || !stats) {
     return (
-      <div className="min-h-dvh flex items-center justify-center relative z-10">
+      <div className="flex-1 flex items-center justify-center w-full">
         <p className="text-white/50 font-hebrew">אין נתונים עדיין</p>
       </div>
     );
@@ -95,25 +106,21 @@ export function MissionControl() {
   const earnedAchievements = achievements.filter(a => player.achievements.includes(a.id));
 
   return (
-    <div className="max-w-2xl mx-auto p-6 relative z-10">
-      <div className="flex items-center justify-between mb-6">
-        <button onClick={() => navigate('/galaxy')} className="text-white/50 hover:text-white cursor-pointer transition-colors">
-          <ArrowRight className="w-6 h-6" />
-        </button>
-        <h2 className="text-xl font-bold font-hebrew">
-          <GlowText color="purple">מרכז שליטה</GlowText>
+    <div className="flex-1 w-full max-w-2xl mx-auto px-5 sm:px-8 py-6">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl sm:text-4xl font-extrabold font-hebrew">
+          <GlowText color="purple">מרכז שליטה</GlowText> 📊
         </h2>
-        <div />
       </div>
 
       {/* Player overview */}
       <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
-        <SpaceCard glow="purple" className="mb-4">
+        <SpaceCard className="mb-6">
           <div className="flex items-center gap-4">
-            <div className="text-4xl">{level.icon}</div>
+            <div className="text-5xl">{avatars[player.avatarIndex] ?? '🧑‍🚀'}</div>
             <div className="flex-1">
-              <h3 className="font-bold font-hebrew text-lg">{player.name}</h3>
-              <p className="text-white/50 text-sm font-hebrew">{level.title} · רמה {level.level}</p>
+              <h3 className="font-bold font-hebrew text-xl">{player.name}</h3>
+              <p className="text-white/50 text-sm font-hebrew">{level.icon} {level.title} · רמה {level.level}</p>
               <div className="w-full h-2 bg-white/10 rounded-full mt-2">
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-neon-purple to-neon-blue"
@@ -129,7 +136,7 @@ export function MissionControl() {
       </motion.div>
 
       {/* Key metrics */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
         {[
           { label: 'משחקים', value: stats.gamesPlayed, icon: '🎮' },
           { label: 'מילים', value: stats.uniqueWords, icon: '📚' },
@@ -152,11 +159,11 @@ export function MissionControl() {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 mb-6">
         <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}>
           <SpaceCard>
             <h4 className="text-sm font-hebrew text-white/60 mb-2">דיוק כללי</h4>
-            <DonutChart value={stats.accuracy} label="דיוק" color="#00d4ff" />
+            <DonutChart value={stats.accuracy} label="דיוק" color="#5B9BF5" />
           </SpaceCard>
         </motion.div>
 
@@ -164,7 +171,7 @@ export function MissionControl() {
           <SpaceCard>
             <h4 className="text-sm font-hebrew text-white/60 mb-2">משחקים שנשחקו</h4>
             <BarChart
-              data={stats.byGame.filter(g => g.played > 0).map(g => ({
+              data={stats.byGame.map(g => ({
                 label: g.icon,
                 value: g.played,
                 color: g.color,
@@ -176,14 +183,14 @@ export function MissionControl() {
 
       {/* Per-game stats */}
       <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5 }}>
-        <SpaceCard className="mb-4">
+        <SpaceCard className="mb-6">
           <h4 className="text-sm font-hebrew text-white/60 mb-3">סטטיסטיקות לפי משחק</h4>
           <div className="space-y-2">
             {stats.byGame.map(g => (
               <div key={g.id} className="flex items-center gap-3">
                 <span className="text-xl">{g.icon}</span>
                 <span className="font-hebrew text-sm flex-1">{g.name}</span>
-                <span className="text-xs text-white/40 font-english">{g.played} games</span>
+                <span className="text-xs text-white/40 font-hebrew">{g.played} משחקים</span>
                 <span className="text-xs font-english" style={{ color: g.color }}>{g.accuracy}%</span>
               </div>
             ))}
@@ -193,7 +200,7 @@ export function MissionControl() {
 
       {/* Achievements */}
       <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6 }}>
-        <SpaceCard glow="gold">
+        <SpaceCard>
           <h4 className="text-sm font-hebrew text-white/60 mb-3">🏆 הישגים ({earnedAchievements.length}/{achievements.length})</h4>
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
             {achievements.map(a => {
@@ -201,7 +208,8 @@ export function MissionControl() {
               return (
                 <div
                   key={a.id}
-                  className={`text-center p-2 rounded-lg ${earned ? 'bg-neon-gold/10' : 'opacity-30'}`}
+                  className="text-center p-2 rounded-lg"
+                  style={earned ? { background: 'rgba(251,191,36,0.1)' } : { opacity: 0.3 }}
                   title={a.description}
                 >
                   <div className="text-2xl">{a.icon}</div>

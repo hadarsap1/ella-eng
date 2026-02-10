@@ -120,7 +120,7 @@ export function SoundTwins() {
   if (!currentPair) return null;
 
   return (
-    <div className="max-w-lg mx-auto p-6 relative z-10">
+    <div className="game-screen">
       <GameHeader title="תאומי הצליל" icon="👯" current={index} total={total} streak={streak} />
 
       <div className="text-center mb-8">
@@ -129,13 +129,18 @@ export function SoundTwins() {
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
           onClick={() => speakWord(currentPair.words[targetIdx].english)}
-          className="inline-flex items-center gap-3 px-8 py-6 rounded-2xl bg-space-light/50 border border-neon-pink/20 hover:bg-space-light/70 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-4 px-10 py-7 rounded-3xl cursor-pointer group transition-all duration-200"
+          style={{
+            background: 'linear-gradient(165deg, rgba(244,114,182,0.12), rgba(236,72,153,0.06))',
+            border: '1.5px solid rgba(244,114,182,0.2)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+          }}
         >
-          <Volume2 className="w-10 h-10 text-neon-pink" />
-          <span className="text-white/50 font-hebrew">לחץ לשמוע שוב</span>
+          <Volume2 className="w-10 h-10 text-neon-pink/60 group-hover:text-neon-pink group-hover:scale-110 transition-all" />
+          <span className="text-white/40 font-hebrew font-medium">🔊 לחץ לשמוע שוב</span>
         </motion.button>
-        <p className="text-white/40 text-sm mt-3 font-hebrew">
-          איזו מילה שמעת? ({currentPair.difference})
+        <p className="text-white/25 text-sm mt-4 font-hebrew font-medium">
+          👯 איזו מילה שמעת? ({currentPair.difference})
         </p>
       </div>
 
@@ -153,12 +158,17 @@ export function SoundTwins() {
               onClick={() => handleSelect(i)}
               disabled={selected !== null}
               className={cn(
-                'p-6 rounded-2xl border-2 text-center transition-all cursor-pointer',
-                isCorrectAnswer && 'bg-neon-green/20 border-neon-green',
-                isWrong && 'bg-neon-pink/20 border-neon-pink',
-                selected === null && 'bg-space-light/50 border-white/10 hover:border-neon-pink/30',
-                selected !== null && !isSelected && !isCorrectAnswer && 'opacity-40',
+                'p-6 sm:p-7 rounded-2xl text-center transition-all duration-200 cursor-pointer',
               )}
+              style={
+                isCorrectAnswer
+                  ? { background: 'linear-gradient(165deg, rgba(52,211,153,0.2), rgba(16,185,129,0.12))', border: '2px solid rgba(52,211,153,0.5)', boxShadow: '0 4px 24px rgba(52,211,153,0.15)' }
+                  : isWrong
+                  ? { background: 'linear-gradient(165deg, rgba(244,114,182,0.2), rgba(236,72,153,0.12))', border: '2px solid rgba(244,114,182,0.5)', boxShadow: '0 4px 24px rgba(244,114,182,0.15)' }
+                  : selected === null
+                  ? { background: 'linear-gradient(165deg, rgba(35,46,90,0.85), rgba(22,30,66,0.9))', border: '1.5px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 16px rgba(0,0,0,0.25)' }
+                  : { background: 'rgba(20,26,55,0.5)', border: '1.5px solid rgba(255,255,255,0.03)', opacity: 0.4 }
+              }
             >
               <div className="text-2xl font-english font-bold mb-2">{word.english}</div>
               <div className="text-sm text-white/60 font-hebrew">{word.hebrew}</div>

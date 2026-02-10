@@ -116,11 +116,19 @@ export function MemoryNebula() {
     );
   }
 
+  if (cards.length === 0) {
+    return (
+      <div className="game-screen items-center justify-center">
+        <p className="text-white/50 font-hebrew text-lg">אין מספיק מילים. בחר עוד אותיות 🔤</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-lg mx-auto p-6 relative z-10">
+    <div className="game-screen">
       <GameHeader title="ערפילית הזיכרון" icon="🌀" current={matchCount} total={pairCount} streak={0} />
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5 sm:gap-3">
         {cards.map(card => {
           const isFlipped = flipped.includes(card.id);
           const isMatched = matched.includes(card.wordKey);
@@ -129,15 +137,17 @@ export function MemoryNebula() {
           return (
             <motion.button
               key={card.id}
-              whileHover={showFace ? {} : { scale: 1.05 }}
+              whileHover={showFace ? {} : { scale: 1.05, y: -2 }}
               whileTap={showFace ? {} : { scale: 0.95 }}
               onClick={() => handleFlip(card.id)}
-              className={cn(
-                'aspect-square rounded-xl border-2 flex items-center justify-center text-center p-2 cursor-pointer transition-all',
-                isMatched && 'bg-neon-green/20 border-neon-green/50 opacity-60',
-                isFlipped && !isMatched && 'bg-neon-blue/20 border-neon-blue/50',
-                !showFace && 'bg-space-light/50 border-white/10 hover:border-white/30',
-              )}
+              className="aspect-square rounded-2xl border-2 flex items-center justify-center text-center p-2 cursor-pointer transition-all duration-200"
+              style={
+                isMatched
+                  ? { background: 'rgba(52,211,153,0.1)', borderColor: 'rgba(52,211,153,0.4)', boxShadow: '0 0 20px rgba(52,211,153,0.1)' }
+                  : isFlipped
+                  ? { background: 'rgba(91,155,245,0.1)', borderColor: 'rgba(91,155,245,0.4)', boxShadow: '0 0 20px rgba(91,155,245,0.1)' }
+                  : { background: 'linear-gradient(165deg, rgba(35,46,90,0.85), rgba(22,30,66,0.9))', borderColor: 'rgba(255,255,255,0.08)' }
+              }
             >
               {showFace ? (
                 <span className={cn(

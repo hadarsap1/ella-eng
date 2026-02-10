@@ -1,8 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowRight, User } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { usePlayerStore } from '../../stores/usePlayerStore';
 import { getLevel, getLevelProgress, getNextLevel } from '../../data/levels';
-import { cn } from '../../lib/cn';
 
 const avatars = ['🧑‍🚀', '👩‍🚀', '👨‍🚀', '🤖', '👽', '🦊'];
 
@@ -18,43 +17,49 @@ export function TopBar() {
   const progress = getLevelProgress(player.xp);
 
   return (
-    <div className="relative z-10 flex items-center justify-between px-4 py-3 bg-space-mid/80 backdrop-blur-sm border-b border-white/10">
+    <div
+      className="relative z-10 flex items-center gap-4 px-5 sm:px-8 py-4"
+      style={{
+        background: 'linear-gradient(180deg, rgba(11, 16, 38, 0.97) 0%, rgba(11, 16, 38, 0.85) 100%)',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        backdropFilter: 'blur(20px)',
+      }}
+    >
+      {/* Back */}
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-1 text-white/70 hover:text-white transition-colors"
+        className="w-11 h-11 flex items-center justify-center rounded-xl ella-btn-ghost cursor-pointer"
         aria-label="חזור"
       >
         <ArrowRight className="w-5 h-5" />
       </button>
 
-      <div className="flex items-center gap-3 flex-1 justify-center">
-        <div className="flex items-center gap-2">
-          <span className="text-xl">{level.icon}</span>
-          <div className="flex flex-col">
-            <span className="text-xs text-white/60 font-hebrew">{level.title}</span>
-            <div className="w-24 h-2 bg-white/10 rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-neon-blue to-neon-purple transition-all duration-500"
-                style={{ width: `${progress * 100}%` }}
-              />
-            </div>
+      {/* Level + XP */}
+      <div className="flex items-center gap-3 flex-1">
+        <span className="text-2xl sm:text-3xl">{level.icon}</span>
+        <div className="flex-1 max-w-[260px]">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-sm text-white/50 font-hebrew font-medium">{level.title}</span>
+            {next && (
+              <span className="text-xs text-neon-blue font-english font-bold">{player.xp}/{next.xpRequired}</span>
+            )}
           </div>
-          {next && (
-            <span className="text-xs text-white/40">{player.xp}/{next.xpRequired} XP</span>
-          )}
+          <div className="w-full h-2.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+            <div
+              className="h-full progress-bar-glow transition-all duration-700 ease-out"
+              style={{ width: `${Math.max(progress * 100, 3)}%` }}
+            />
+          </div>
         </div>
       </div>
 
+      {/* Player badge */}
       <button
         onClick={() => navigate('/galaxy')}
-        className={cn(
-          "flex items-center gap-2 px-3 py-1.5 rounded-full",
-          "bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
-        )}
+        className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl ella-btn-ghost cursor-pointer"
       >
-        <span className="text-lg">{avatars[player.avatarIndex] || '🧑‍🚀'}</span>
-        <span className="text-sm font-hebrew">{player.name}</span>
-        <User className="w-4 h-4 text-white/50" />
+        <span className="text-2xl sm:text-3xl">{avatars[player.avatarIndex] || '🧑‍🚀'}</span>
+        <span className="text-sm font-hebrew text-white/60 font-bold hidden sm:inline">{player.name}</span>
       </button>
     </div>
   );

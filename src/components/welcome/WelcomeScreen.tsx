@@ -32,25 +32,46 @@ export function WelcomeScreen() {
   };
 
   return (
-    <div className="min-h-dvh flex flex-col items-center justify-center p-6 relative z-10">
+    <div className="flex-1 flex flex-col items-center justify-center px-5 py-10 w-full">
+      {/* Hero */}
       <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
+        initial={{ scale: 0.3, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="text-center mb-8"
+        transition={{ type: 'spring', damping: 12, duration: 0.8 }}
+        className="text-center mb-12"
       >
-        <div className="text-6xl mb-4">🚀</div>
-        <h1 className="text-4xl font-bold font-english mb-2">
+        <motion.div
+          animate={{ y: [0, -14, 0] }}
+          transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+          className="relative inline-block mb-6"
+        >
+          <div className="text-[100px] sm:text-[120px] leading-none" style={{ filter: 'drop-shadow(0 8px 24px rgba(91,155,245,0.2))' }}>🚀</div>
+          {/* Engine glow */}
+          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-10 h-14 rounded-full opacity-50"
+            style={{ background: 'radial-gradient(ellipse, #FBBF24 0%, #FB923C 40%, transparent 70%)', filter: 'blur(10px)' }} />
+        </motion.div>
+
+        <h1 className="text-7xl sm:text-8xl font-extrabold font-english mb-3 tracking-tight leading-none">
           <GlowText color="blue">Ella</GlowText>
           <GlowText color="purple">Eng</GlowText>
         </h1>
-        <p className="text-white/60 font-hebrew text-lg">הרפתקת חלל באנגלית</p>
+
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="text-white/35 font-hebrew text-xl tracking-wide font-medium"
+        >
+          הרפתקת חלל באנגלית ✨
+        </motion.p>
       </motion.div>
 
       {mode === 'choose' && players.length > 0 ? (
         <motion.div
-          initial={{ y: 20, opacity: 0 }}
+          initial={{ y: 40, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="w-full max-w-sm space-y-4"
+          transition={{ delay: 0.2 }}
+          className="w-full max-w-md space-y-4"
         >
           <PlayerSelector players={players} onSelect={handleSelect} />
           <SpaceButton
@@ -63,62 +84,85 @@ export function WelcomeScreen() {
         </motion.div>
       ) : (
         <motion.div
-          initial={{ y: 20, opacity: 0 }}
+          initial={{ y: 40, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="w-full max-w-sm space-y-6"
+          transition={{ delay: 0.3 }}
+          className="w-full max-w-md"
         >
-          <div className="text-center">
-            <p className="text-white/70 font-hebrew mb-4">בחר אסטרונאוט</p>
-            <div className="flex justify-center gap-3">
-              {avatars.map((a, i) => (
-                <motion.button
-                  key={i}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => setAvatarIdx(i)}
-                  className={`text-3xl p-2 rounded-xl border-2 transition-colors cursor-pointer ${
-                    avatarIdx === i
-                      ? 'border-neon-blue bg-neon-blue/20'
-                      : 'border-white/10 bg-white/5'
-                  }`}
-                >
-                  {a}
-                </motion.button>
-              ))}
+          <div className="ella-card-raised p-8 sm:p-10 space-y-8">
+            {/* Avatar picker */}
+            <div className="text-center">
+              <p className="text-white/40 font-hebrew mb-5 text-sm font-medium tracking-wide">בחר את האסטרונאוט שלך</p>
+              <div className="flex justify-center gap-3">
+                {avatars.map((a, i) => (
+                  <motion.button
+                    key={i}
+                    whileHover={{ scale: 1.15, y: -4 }}
+                    whileTap={{ scale: 0.85 }}
+                    onClick={() => setAvatarIdx(i)}
+                    className="text-4xl p-3 rounded-2xl border-2 transition-all duration-200 cursor-pointer"
+                    style={avatarIdx === i ? {
+                      borderColor: 'rgba(91,155,245,0.5)',
+                      background: 'rgba(91,155,245,0.12)',
+                      boxShadow: '0 0 24px rgba(91,155,245,0.15)',
+                      transform: 'scale(1.08)',
+                    } : {
+                      borderColor: 'rgba(255,255,255,0.06)',
+                      background: 'rgba(255,255,255,0.03)',
+                    }}
+                  >
+                    {a}
+                  </motion.button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div>
-            <input
-              type="text"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleCreate()}
-              placeholder="מה השם שלך?"
-              maxLength={15}
-              className="w-full px-4 py-3 rounded-xl bg-space-light/50 border border-white/10 text-white text-center font-hebrew text-lg placeholder:text-white/30 focus:outline-none focus:border-neon-blue/50"
-              dir="rtl"
-            />
-          </div>
+            {/* Name input */}
+            <div>
+              <input
+                type="text"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleCreate()}
+                placeholder="✏️ מה השם שלך?"
+                maxLength={15}
+                className="w-full px-6 py-4 rounded-2xl text-white text-center font-hebrew text-xl placeholder:text-white/20 focus:outline-none transition-all duration-300"
+                style={{
+                  background: 'rgba(255,255,255,0.04)',
+                  border: name ? '1.5px solid rgba(91,155,245,0.3)' : '1.5px solid rgba(255,255,255,0.06)',
+                  boxShadow: name ? '0 0 16px rgba(91,155,245,0.08)' : 'none',
+                }}
+                dir="rtl"
+              />
+            </div>
 
-          <SpaceButton
-            variant="primary"
-            size="lg"
-            className="w-full"
-            onClick={handleCreate}
-            disabled={!name.trim()}
-          >
-            🚀 יוצאים להרפתקה!
-          </SpaceButton>
+            {/* Launch button */}
+            <SpaceButton
+              variant="success"
+              size="lg"
+              className="w-full text-xl font-extrabold"
+              onClick={handleCreate}
+              disabled={!name.trim()}
+            >
+              🚀 יוצאים להרפתקה!
+            </SpaceButton>
+          </div>
 
           {players.length > 0 && (
-            <SpaceButton
-              variant="ghost"
-              className="w-full"
-              onClick={() => setMode('choose')}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7 }}
+              className="mt-5"
             >
-              חזרה לבחירת שחקן
-            </SpaceButton>
+              <SpaceButton
+                variant="ghost"
+                className="w-full"
+                onClick={() => setMode('choose')}
+              >
+                ← חזרה לבחירת שחקן
+              </SpaceButton>
+            </motion.div>
           )}
         </motion.div>
       )}

@@ -160,7 +160,7 @@ export function ListeningAsteroid() {
   if (!currentWord) return null;
 
   return (
-    <div className="max-w-lg mx-auto p-6 relative z-10">
+    <div className="game-screen">
       <GameHeader title="אסטרואיד ההאזנה" icon="🌠" current={index} total={total} streak={streak} />
 
       {/* Listen button */}
@@ -170,10 +170,15 @@ export function ListeningAsteroid() {
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
           onClick={() => speakWord(currentWord.english)}
-          className="inline-flex items-center gap-3 px-8 py-6 rounded-2xl bg-space-light/50 border border-neon-gold/20 hover:bg-space-light/70 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-3 px-8 py-6 rounded-2xl cursor-pointer group transition-all duration-200"
+          style={{
+            background: 'linear-gradient(165deg, rgba(251,191,36,0.12), rgba(245,158,11,0.06))',
+            border: '1.5px solid rgba(251,191,36,0.2)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+          }}
         >
-          <Volume2 className="w-10 h-10 text-neon-gold" />
-          <span className="text-white/50 font-hebrew">לחץ לשמוע</span>
+          <Volume2 className="w-10 h-10 text-neon-gold/60 group-hover:text-neon-gold group-hover:scale-110 transition-all" />
+          <span className="text-white/40 font-hebrew font-medium">🔊 לחץ לשמוע</span>
         </motion.button>
       </div>
 
@@ -209,11 +214,14 @@ export function ListeningAsteroid() {
               key={i}
               initial={filled ? { scale: 1.3 } : {}}
               animate={{ scale: 1 }}
-              className={cn(
-                'w-12 h-14 rounded-lg border-2 flex items-center justify-center text-2xl font-english font-bold',
-                filled ? 'bg-neon-gold/20 border-neon-gold text-neon-gold' : 'bg-space-light/30 border-white/20 text-transparent',
-                wordComplete && !isCorrectFeedback && 'border-neon-pink text-neon-pink bg-neon-pink/10',
-              )}
+              className="w-12 h-14 rounded-xl border-2 flex items-center justify-center text-2xl font-english font-bold transition-all"
+              style={
+                wordComplete && !isCorrectFeedback
+                  ? { background: 'linear-gradient(165deg, rgba(244,114,182,0.2), rgba(236,72,153,0.12))', borderColor: 'rgba(244,114,182,0.5)', color: '#F472B6', boxShadow: '0 4px 16px rgba(244,114,182,0.1)' }
+                  : filled
+                  ? { background: 'linear-gradient(165deg, rgba(251,191,36,0.15), rgba(245,158,11,0.08))', borderColor: 'rgba(251,191,36,0.5)', color: '#FBBF24', boxShadow: '0 4px 16px rgba(251,191,36,0.1)' }
+                  : { background: 'linear-gradient(165deg, rgba(35,46,90,0.6), rgba(22,30,66,0.7))', borderColor: 'rgba(255,255,255,0.12)', color: 'transparent', boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.3)' }
+              }
             >
               {filled ? typed[i] : '_'}
             </motion.div>
@@ -242,10 +250,15 @@ export function ListeningAsteroid() {
             onClick={() => handleKey(letter)}
             disabled={wordComplete}
             className={cn(
-              'w-11 h-11 rounded-lg border font-english font-bold text-lg uppercase cursor-pointer transition-all',
-              'bg-space-light/50 border-white/20 text-white/80 hover:border-neon-gold/50 hover:bg-space-light/70',
+              'w-11 h-11 rounded-xl font-english font-bold text-lg uppercase cursor-pointer transition-all',
               wordComplete && 'opacity-30 cursor-not-allowed',
             )}
+            style={{
+              background: 'linear-gradient(165deg, rgba(35,46,90,0.85), rgba(22,30,66,0.9))',
+              border: '1.5px solid rgba(255,255,255,0.1)',
+              color: 'rgba(255,255,255,0.85)',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
+            }}
           >
             {letter}
           </motion.button>

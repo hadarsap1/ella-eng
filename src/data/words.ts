@@ -156,6 +156,58 @@ export const allWords: Word[] = [
   { english: "pink", hebrew: "ורוד", letters: ["p", "i", "n", "k"] },
   { english: "think", hebrew: "לחשוב", letters: ["t", "h", "i", "n", "k"] },
 
+  // CVC - "ad" family
+  { english: "bad", hebrew: "רע", letters: ["b", "a", "d"] },
+  { english: "sad", hebrew: "עצוב", letters: ["s", "a", "d"] },
+
+  // CVC - "ag" family
+  { english: "bag", hebrew: "תיק", letters: ["b", "a", "g"] },
+
+  // CVC - "eg" family
+  { english: "beg", hebrew: "להתחנן", letters: ["b", "e", "g"] },
+  { english: "peg", hebrew: "יתד", letters: ["p", "e", "g"] },
+
+  // CVC - "ap" family
+  { english: "cap", hebrew: "כיפה", letters: ["c", "a", "p"] },
+  { english: "map", hebrew: "מפה", letters: ["m", "a", "p"] },
+  { english: "tap", hebrew: "ברז", letters: ["t", "a", "p"] },
+
+  // CVC - "op" family
+  { english: "mop", hebrew: "מגב", letters: ["m", "o", "p"] },
+  { english: "top", hebrew: "למעלה", letters: ["t", "o", "p"] },
+  { english: "hop", hebrew: "לקפוץ", letters: ["h", "o", "p"] },
+  { english: "cop", hebrew: "שוטר", letters: ["c", "o", "p"] },
+
+  // CVC - "ip" family
+  { english: "hip", hebrew: "ירך", letters: ["h", "i", "p"] },
+
+  // CVC - "it" family
+  { english: "sit", hebrew: "לשבת", letters: ["s", "i", "t"] },
+  { english: "hit", hebrew: "להכות", letters: ["h", "i", "t"] },
+  { english: "bit", hebrew: "קצת", letters: ["b", "i", "t"] },
+  { english: "pit", hebrew: "בור", letters: ["p", "i", "t"] },
+
+  // CVC - "et" family
+  { english: "pet", hebrew: "חיית מחמד", letters: ["p", "e", "t"] },
+  { english: "set", hebrew: "לקבוע", letters: ["s", "e", "t"] },
+
+  // CVC - "in" family
+  { english: "pin", hebrew: "סיכה", letters: ["p", "i", "n"] },
+  { english: "tin", hebrew: "פח", letters: ["t", "i", "n"] },
+
+  // CVC - "on" family
+  { english: "son", hebrew: "בן", letters: ["s", "o", "n"] },
+
+  // CVC - "ug/og" family
+  { english: "bug", hebrew: "חרק", letters: ["b", "u", "g"] },
+  { english: "bog", hebrew: "ביצה", letters: ["b", "o", "g"] },
+
+  // CVC - "ot" extras
+  { english: "bot", hebrew: "רובוט", letters: ["b", "o", "t"] },
+
+  // Past tense / misc used in sentences
+  { english: "sang", hebrew: "שר", letters: ["s", "a", "n", "g"] },
+
   // 5+ letter words
   { english: "apple", hebrew: "תפוח", letters: ["a", "p", "p", "l", "e"] },
   { english: "happy", hebrew: "שמח", letters: ["h", "a", "p", "p", "y"] },

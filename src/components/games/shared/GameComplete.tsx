@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { SpaceButton } from '../../ui/SpaceButton';
 import { GlowText } from '../../ui/GlowText';
-import { SpaceCard } from '../../ui/SpaceCard';
 import { useCelebration } from '../../../hooks/useCelebration';
 import { useSoundEffects } from '../../../hooks/useSoundEffects';
 import { getLevel } from '../../../data/levels';
@@ -35,72 +34,93 @@ export function GameComplete({ correct, total, xpEarned, maxStreak, xpBefore, xp
     if (leveledUp) playLevelUp();
   }, [accuracy, leveledUp, bigCelebrate, celebrate, playLevelUp]);
 
+  const emoji = accuracy >= 80 ? '🌟' : accuracy >= 50 ? '⭐' : '💫';
+  const message = accuracy >= 80 ? 'מדהים!' : accuracy >= 50 ? 'כל הכבוד!' : 'תמשיך לתרגל!';
+  const glowColor = accuracy >= 80 ? 'gold' as const : accuracy >= 50 ? 'blue' as const : 'purple' as const;
+
+  const stats = [
+    { value: `${accuracy}%`, label: 'דיוק', color: '#5B9BF5' },
+    { value: `+${xpEarned}`, label: 'XP', color: '#FBBF24' },
+    { value: `${correct}/${total}`, label: 'תשובות נכונות', color: '#34D399' },
+    { value: `${maxStreak}`, label: 'רצף מקסימלי', color: '#F472B6' },
+  ];
+
   return (
-    <div className="min-h-dvh flex flex-col items-center justify-center p-6 relative z-10">
+    <div className="flex-1 flex flex-col items-center justify-center p-6 w-full">
       {leveledUp && <LevelUpModal level={levelAfter} />}
 
+      {/* Big emoji */}
       <motion.div
-        initial={{ scale: 0.5, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        className="text-center mb-8"
+        initial={{ scale: 0, rotate: -30 }}
+        animate={{ scale: 1, rotate: 0 }}
+        transition={{ type: 'spring', damping: 10, delay: 0.2 }}
+        className="text-7xl sm:text-8xl mb-6"
+        style={{ filter: 'drop-shadow(0 4px 20px rgba(251,191,36,0.2))' }}
       >
-        <div className="text-6xl mb-4">
-          {accuracy >= 80 ? '🌟' : accuracy >= 50 ? '⭐' : '💫'}
-        </div>
-        <h2 className="text-3xl font-bold font-hebrew mb-2">
-          {accuracy >= 80 ? (
-            <GlowText color="gold">מדהים!</GlowText>
-          ) : accuracy >= 50 ? (
-            <GlowText color="blue">כל הכבוד!</GlowText>
-          ) : (
-            <GlowText color="purple">תמשיך לתרגל!</GlowText>
-          )}
-        </h2>
+        {emoji}
       </motion.div>
 
-      <SpaceCard glow="blue" className="max-w-sm w-full mb-6">
-        <div className="grid grid-cols-2 gap-4 text-center">
-          <div>
-            <div className="text-3xl font-bold text-neon-blue font-english">{accuracy}%</div>
-            <div className="text-sm text-white/50 font-hebrew">דיוק</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-neon-gold font-english">+{xpEarned}</div>
-            <div className="text-sm text-white/50 font-hebrew">XP</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-neon-green font-english">{correct}/{total}</div>
-            <div className="text-sm text-white/50 font-hebrew">תשובות נכונות</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-neon-pink font-english">{maxStreak}</div>
-            <div className="text-sm text-white/50 font-hebrew">רצף מקסימלי</div>
-          </div>
-        </div>
-      </SpaceCard>
+      {/* Title */}
+      <motion.h2
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.4 }}
+        className="text-4xl font-extrabold font-hebrew mb-8"
+      >
+        <GlowText color={glowColor}>{message}</GlowText>
+      </motion.h2>
 
+      {/* Stats card */}
+      <motion.div
+        initial={{ y: 30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="ella-card-raised rounded-3xl p-7 max-w-sm w-full mb-6"
+      >
+        <div className="grid grid-cols-2 gap-6 text-center">
+          {stats.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.6 + i * 0.1, type: 'spring', damping: 12 }}
+            >
+              <div className="text-3xl font-extrabold font-english" style={{ color: stat.color }}>
+                {stat.value}
+              </div>
+              <div className="text-xs text-white/35 font-hebrew mt-1 font-medium">{stat.label}</div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* New achievements */}
       {newAchievements.length > 0 && (
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mb-6 text-center"
+          transition={{ delay: 0.8 }}
+          className="mb-6 ella-card rounded-2xl px-5 py-3"
+          style={{ borderColor: 'rgba(251,191,36,0.2)' }}
         >
-          <p className="text-neon-gold font-hebrew mb-2">🏆 הישגים חדשים!</p>
-          {newAchievements.map(id => (
-            <div key={id} className="text-sm text-white/70">{id}</div>
-          ))}
+          <p className="text-neon-gold font-hebrew text-sm text-center font-bold">🏆 הישגים חדשים!</p>
         </motion.div>
       )}
 
-      <div className="flex gap-3">
+      {/* Actions */}
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.9 }}
+        className="flex gap-3"
+      >
         <SpaceButton variant="primary" onClick={() => navigate('/galaxy')}>
           חזרה לגלקסיה
         </SpaceButton>
         <SpaceButton variant="ghost" onClick={() => window.location.reload()}>
           שחק שוב
         </SpaceButton>
-      </div>
+      </motion.div>
     </div>
   );
 }
