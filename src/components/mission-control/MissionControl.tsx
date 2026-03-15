@@ -33,7 +33,7 @@ function BarChart({ data }: { data: { label: string; value: number; color: strin
               </linearGradient>
             </defs>
             <rect x={x} y={y} width={barWidth} height={height} rx={6} fill={`url(#bar-${i})`} />
-            <text x={x + barWidth / 2} y={150} textAnchor="middle" fill="white" opacity={0.4} fontSize={14}>{d.label}</text>
+            <text x={x + barWidth / 2} y={150} textAnchor="middle" fill="white" opacity={0.6} fontSize={14} fontFamily="Rubik">{d.label}</text>
             <text x={x + barWidth / 2} y={y - 6} textAnchor="middle" fill={d.color} fontSize={11} fontFamily="Quicksand" fontWeight="bold">{d.value}</text>
           </g>
         );
@@ -127,7 +127,7 @@ export function MissionControl() {
                   style={{ width: `${progress * 100}%` }}
                 />
               </div>
-              <p className="text-xs text-white/30 mt-1 font-hebrew">
+              <p className="text-xs text-white/50 mt-1 font-hebrew">
                 {player.xp} XP {next && `/ ${next.xpRequired} לרמה הבאה`}
               </p>
             </div>
@@ -152,7 +152,7 @@ export function MissionControl() {
             <SpaceCard className="text-center">
               <div className="text-2xl mb-1">{m.icon}</div>
               <div className="text-xl font-bold font-english text-neon-blue">{m.value}</div>
-              <div className="text-xs text-white/40 font-hebrew">{m.label}</div>
+              <div className="text-xs text-white/60 font-hebrew">{m.label}</div>
             </SpaceCard>
           </motion.div>
         ))}
@@ -208,12 +208,12 @@ export function MissionControl() {
               return (
                 <div
                   key={a.id}
-                  className="text-center p-2 rounded-lg"
+                  className="text-center p-3 rounded-lg"
                   style={earned ? { background: 'rgba(251,191,36,0.1)' } : { opacity: 0.3 }}
-                  title={a.description}
                 >
-                  <div className="text-2xl">{a.icon}</div>
-                  <div className="text-xs font-hebrew text-white/60 mt-1">{a.title}</div>
+                  <div className="text-2xl mb-1">{a.icon}</div>
+                  <div className="text-xs font-hebrew text-white/70 font-medium">{a.title}</div>
+                  <div className="text-[10px] font-hebrew text-white/40 mt-0.5 leading-tight">{a.description}</div>
                 </div>
               );
             })}

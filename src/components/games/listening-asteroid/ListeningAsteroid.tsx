@@ -205,7 +205,7 @@ export function ListeningAsteroid() {
           }}
         >
           <Volume2 className="w-10 h-10 text-neon-gold/60 group-hover:text-neon-gold group-hover:scale-110 transition-all" />
-          <span className="text-white/40 font-hebrew font-medium">🔊 לחץ לשמוע</span>
+          <span className="text-white/60 font-hebrew font-medium">🔊 לחץ לשמוע</span>
         </motion.button>
       </div>
 
@@ -268,7 +268,7 @@ export function ListeningAsteroid() {
       )}
 
       {/* Virtual keyboard */}
-      <div className="flex flex-wrap gap-2 justify-center">
+      <div className="flex flex-wrap gap-3 justify-center">
         {keyboardLetters.map(letter => (
           <motion.button
             key={letter}
@@ -276,8 +276,9 @@ export function ListeningAsteroid() {
             whileTap={{ scale: 0.9 }}
             onClick={() => handleKey(letter)}
             disabled={wordComplete}
+            aria-label={letter}
             className={cn(
-              'w-11 h-11 rounded-xl font-english font-bold text-lg uppercase cursor-pointer transition-all',
+              'w-14 h-14 rounded-xl font-english font-bold text-xl uppercase cursor-pointer transition-all',
               wordComplete && 'opacity-30 cursor-not-allowed',
             )}
             style={{

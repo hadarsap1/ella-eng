@@ -19,7 +19,7 @@ export function GameHeader({ title, icon, current, total, streak }: Props) {
           <span className="font-hebrew font-bold text-white/80 text-lg">{title}</span>
         </div>
         <div className="flex items-center gap-3">
-          {streak >= 2 && (
+          {streak >= 1 && (
             <motion.div
               initial={{ scale: 0, rotate: -20 }}
               animate={{ scale: 1, rotate: 0 }}
@@ -29,17 +29,26 @@ export function GameHeader({ title, icon, current, total, streak }: Props) {
                 background: 'linear-gradient(135deg, rgba(251,191,36,0.15), rgba(245,158,11,0.08))',
                 border: '1px solid rgba(251,191,36,0.25)',
               }}
+              title={`רצף של ${streak} תשובות נכונות ברצף!`}
             >
               <span className="text-sm">🔥</span>
               <span className="text-sm font-bold text-neon-gold font-english">{streak}</span>
             </motion.div>
           )}
-          <span className="text-sm text-white/30 font-english font-bold">{current}/{total}</span>
+          <span className="text-sm text-white/60 font-english font-bold">{current}/{total}</span>
         </div>
       </div>
 
       {/* Progress bar */}
-      <div className="w-full h-2.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
+      <div
+        className="w-full h-2.5 rounded-full overflow-hidden"
+        style={{ background: 'rgba(255,255,255,0.05)' }}
+        role="progressbar"
+        aria-valuenow={Math.round(progress)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label="התקדמות במשחק"
+      >
         <motion.div
           className="h-full progress-bar-glow"
           initial={{ width: 0 }}

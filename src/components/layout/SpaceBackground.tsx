@@ -11,7 +11,7 @@ interface Star {
 
 export function SpaceBackground() {
   const stars = useMemo<Star[]>(() => {
-    return Array.from({ length: 50 }, () => ({
+    return Array.from({ length: 30 }, () => ({
       x: Math.random() * 100,
       y: Math.random() * 100,
       size: Math.random() < 0.15 ? 2.5 + Math.random() * 1.5 : 1 + Math.random() * 1,

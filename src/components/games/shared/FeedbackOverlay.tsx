@@ -1,5 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 
+const encouragements = ['!כמעט', 'בפעם הבאה!', 'ממשיכים!', '!לא נורא'];
+
 interface Props {
   show: boolean;
   correct: boolean;
@@ -7,6 +9,10 @@ interface Props {
 }
 
 export function FeedbackOverlay({ show, correct, message }: Props) {
+  const defaultMessage = correct
+    ? undefined
+    : encouragements[Math.floor(Math.random() * encouragements.length)];
+
   return (
     <AnimatePresence>
       {show && (
@@ -22,7 +28,7 @@ export function FeedbackOverlay({ show, correct, message }: Props) {
             animate={{ opacity: 0.12 }}
             exit={{ opacity: 0 }}
             className="absolute inset-0"
-            style={{ backgroundColor: correct ? '#34D399' : '#F472B6' }}
+            style={{ backgroundColor: correct ? '#34D399' : '#FBBF24' }}
           />
 
           {/* Feedback card */}
@@ -37,9 +43,9 @@ export function FeedbackOverlay({ show, correct, message }: Props) {
               border: '2px solid rgba(52,211,153,0.3)',
               boxShadow: '0 0 50px rgba(52,211,153,0.15), 0 8px 32px rgba(0,0,0,0.3)',
             } : {
-              background: 'linear-gradient(165deg, rgba(244,114,182,0.15), rgba(236,72,153,0.1))',
-              border: '2px solid rgba(244,114,182,0.3)',
-              boxShadow: '0 0 50px rgba(244,114,182,0.15), 0 8px 32px rgba(0,0,0,0.3)',
+              background: 'linear-gradient(165deg, rgba(251,191,36,0.15), rgba(245,158,11,0.1))',
+              border: '2px solid rgba(251,191,36,0.3)',
+              boxShadow: '0 0 50px rgba(251,191,36,0.15), 0 8px 32px rgba(0,0,0,0.3)',
             }}
           >
             <motion.div
@@ -47,13 +53,11 @@ export function FeedbackOverlay({ show, correct, message }: Props) {
               animate={{ rotate: 0, scale: 1 }}
               className="text-6xl mb-3"
             >
-              {correct ? '✅' : '❌'}
+              {correct ? '⭐' : '🤔'}
             </motion.div>
-            {message && (
-              <p className={`font-hebrew text-lg ${correct ? 'text-neon-green' : 'text-neon-pink'}`}>
-                {message}
-              </p>
-            )}
+            <p className={`font-hebrew text-lg font-bold ${correct ? 'text-neon-green' : 'text-neon-gold'}`}>
+              {message || defaultMessage || (correct ? '!מצוין' : '')}
+            </p>
           </motion.div>
         </motion.div>
       )}

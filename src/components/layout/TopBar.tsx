@@ -39,12 +39,20 @@ export function TopBar() {
         <span className="text-2xl sm:text-3xl">{level.icon}</span>
         <div className="flex-1 max-w-[260px]">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-sm text-white/50 font-hebrew font-medium">{level.title}</span>
+            <span className="text-sm text-white/70 font-hebrew font-medium">{level.title}</span>
             {next && (
               <span className="text-xs text-neon-blue font-english font-bold">{player.xp}/{next.xpRequired}</span>
             )}
           </div>
-          <div className="w-full h-2.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+          <div
+            className="w-full h-2.5 rounded-full overflow-hidden"
+            style={{ background: 'rgba(255,255,255,0.06)' }}
+            role="progressbar"
+            aria-valuenow={Math.round(progress * 100)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="התקדמות רמה"
+          >
             <div
               className="h-full progress-bar-glow transition-all duration-700 ease-out"
               style={{ width: `${Math.max(progress * 100, 3)}%` }}

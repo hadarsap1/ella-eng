@@ -155,10 +155,10 @@ export function SentenceStation() {
           }}
         >
           <Volume2 className="w-8 h-8 text-neon-green/60 group-hover:text-neon-green group-hover:scale-110 transition-all" />
-          <span className="text-white/40 font-hebrew font-medium">🔊 שמע את המשפט</span>
+          <span className="text-white/60 font-hebrew font-medium">🔊 שמע את המשפט</span>
         </motion.button>
         <p className="text-lg font-hebrew text-white/70 mt-3">{currentSentence.hebrew}</p>
-        <p className="text-sm text-white/25 font-hebrew mt-1 font-medium">🚉 סדר את המילים למשפט נכון באנגלית</p>
+        <p className="text-base text-white/70 font-hebrew mt-1 font-medium">🚉 סדר את המילים למשפט נכון באנגלית</p>
       </div>
 
       {/* Placed words area */}
@@ -172,7 +172,7 @@ export function SentenceStation() {
       >
         <AnimatePresence mode="popLayout">
           {placed.length === 0 ? (
-            <span className="text-white/20 font-hebrew text-sm">גרור מילים לכאן</span>
+            <span className="text-white/50 font-hebrew text-sm">👆 לחץ על מילים לסדר אותן</span>
           ) : (
             placed.map((word, i) => (
               <motion.button

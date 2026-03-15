@@ -35,7 +35,7 @@ export function GalaxyMap() {
           <GlowText color="purple">מפת הגלקסיה</GlowText> 🌌
         </h2>
         {level && (
-          <p className="text-white/35 text-base sm:text-lg font-hebrew font-medium">
+          <p className="text-white/60 text-base sm:text-lg font-hebrew font-medium">
             <span className="text-xl">{level.icon}</span> {level.title} · בחר משחק
           </p>
         )}

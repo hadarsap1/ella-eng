@@ -160,7 +160,7 @@ export function PlanetOfWords() {
             </span>
           </div>
         </motion.button>
-        <p className="text-white/25 text-sm font-hebrew font-medium">🎯 בחר את התרגום הנכון</p>
+        <p className="text-white/70 text-base font-hebrew font-medium">🎯 בחר את התרגום הנכון</p>
       </motion.div>
 
       {/* Answer options — big, chunky, filling bottom */}

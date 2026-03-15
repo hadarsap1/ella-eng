@@ -128,7 +128,7 @@ export function MemoryNebula() {
     <div className="game-screen">
       <GameHeader title="ערפילית הזיכרון" icon="🌀" current={matchCount} total={pairCount} streak={0} />
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5 sm:gap-3">
+      <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
         {cards.map(card => {
           const isFlipped = flipped.includes(card.id);
           const isMatched = matched.includes(card.wordKey);
@@ -152,7 +152,7 @@ export function MemoryNebula() {
               {showFace ? (
                 <span className={cn(
                   'font-semibold',
-                  card.lang === 'en' ? 'font-english text-neon-blue text-sm' : 'font-hebrew text-white text-xs'
+                  card.lang === 'en' ? 'font-english text-neon-blue text-base sm:text-lg' : 'font-hebrew text-white text-sm sm:text-base'
                 )}>
                   {card.display}
                 </span>

@@ -60,7 +60,7 @@ export function WelcomeScreen() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="text-white/35 font-hebrew text-xl tracking-wide font-medium"
+          className="text-white/60 font-hebrew text-xl tracking-wide font-medium"
         >
           הרפתקת חלל באנגלית ✨
         </motion.p>
@@ -92,7 +92,7 @@ export function WelcomeScreen() {
           <div className="ella-card-raised p-8 sm:p-10 space-y-8">
             {/* Avatar picker */}
             <div className="text-center">
-              <p className="text-white/40 font-hebrew mb-5 text-sm font-medium tracking-wide">בחר את האסטרונאוט שלך</p>
+              <label className="text-white/70 font-hebrew mb-5 text-sm font-medium tracking-wide block">בחר את האסטרונאוט שלך</label>
               <div className="flex justify-center gap-3">
                 {avatars.map((a, i) => (
                   <motion.button
@@ -100,6 +100,8 @@ export function WelcomeScreen() {
                     whileHover={{ scale: 1.15, y: -4 }}
                     whileTap={{ scale: 0.85 }}
                     onClick={() => setAvatarIdx(i)}
+                    aria-label={`אסטרונאוט ${i + 1}`}
+                    aria-pressed={avatarIdx === i}
                     className="text-4xl p-3 rounded-2xl border-2 transition-all duration-200 cursor-pointer"
                     style={avatarIdx === i ? {
                       borderColor: 'rgba(91,155,245,0.5)',
@@ -119,14 +121,17 @@ export function WelcomeScreen() {
 
             {/* Name input */}
             <div>
+              <label htmlFor="player-name" className="text-white/70 font-hebrew text-sm font-medium block mb-2">✏️ מה השם שלך?</label>
               <input
+                id="player-name"
                 type="text"
                 value={name}
                 onChange={e => setName(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleCreate()}
-                placeholder="✏️ מה השם שלך?"
-                maxLength={15}
-                className="w-full px-6 py-4 rounded-2xl text-white text-center font-hebrew text-xl placeholder:text-white/20 focus:outline-none transition-all duration-300"
+                placeholder="הכנס שם..."
+                maxLength={20}
+                aria-label="הכנס את השם שלך"
+                className="w-full px-6 py-4 rounded-2xl text-white text-center font-hebrew text-xl placeholder:text-white/40 focus:outline-none transition-all duration-300"
                 style={{
                   background: 'rgba(255,255,255,0.04)',
                   border: name ? '1.5px solid rgba(91,155,245,0.3)' : '1.5px solid rgba(255,255,255,0.06)',

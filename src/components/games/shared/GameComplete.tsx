@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { SpaceButton } from '../../ui/SpaceButton';
 import { GlowText } from '../../ui/GlowText';
@@ -20,6 +20,7 @@ interface Props {
 
 export function GameComplete({ correct, total, xpEarned, maxStreak, xpBefore, xpAfter, newAchievements }: Props) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { celebrate, bigCelebrate } = useCelebration();
   const { playLevelUp } = useSoundEffects();
 
@@ -88,7 +89,7 @@ export function GameComplete({ correct, total, xpEarned, maxStreak, xpBefore, xp
               <div className="text-3xl font-extrabold font-english" style={{ color: stat.color }}>
                 {stat.value}
               </div>
-              <div className="text-xs text-white/35 font-hebrew mt-1 font-medium">{stat.label}</div>
+              <div className="text-xs text-white/60 font-hebrew mt-1 font-medium">{stat.label}</div>
             </motion.div>
           ))}
         </div>
@@ -117,8 +118,8 @@ export function GameComplete({ correct, total, xpEarned, maxStreak, xpBefore, xp
         <SpaceButton variant="primary" onClick={() => navigate('/galaxy')}>
           חזרה לגלקסיה
         </SpaceButton>
-        <SpaceButton variant="ghost" onClick={() => window.location.reload()}>
-          שחק שוב
+        <SpaceButton variant="ghost" onClick={() => navigate(location.pathname, { replace: true, state: { key: Date.now() } })}>
+          🔄 שחק שוב
         </SpaceButton>
       </motion.div>
     </div>

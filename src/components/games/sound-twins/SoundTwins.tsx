@@ -145,9 +145,9 @@ export function SoundTwins() {
           }}
         >
           <Volume2 className="w-10 h-10 text-neon-pink/60 group-hover:text-neon-pink group-hover:scale-110 transition-all" />
-          <span className="text-white/40 font-hebrew font-medium">🔊 לחץ לשמוע שוב</span>
+          <span className="text-white/60 font-hebrew font-medium">🔊 לחץ לשמוע שוב</span>
         </motion.button>
-        <p className="text-white/25 text-sm mt-4 font-hebrew font-medium">
+        <p className="text-white/70 text-base mt-4 font-hebrew font-medium">
           👯 איזו מילה שמעת? ({currentPair.difference})
         </p>
       </div>

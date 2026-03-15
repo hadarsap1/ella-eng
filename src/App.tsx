@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import { GameShell } from './components/layout/GameShell';
 // Import audio early so unlock listeners register before any game loads
 import './lib/audio';
@@ -64,10 +64,12 @@ function AnimatedRoutes() {
 
 export default function App() {
   return (
-    <HashRouter>
-      <GameShell>
-        <AnimatedRoutes />
-      </GameShell>
-    </HashRouter>
+    <MotionConfig reducedMotion="user">
+      <HashRouter>
+        <GameShell>
+          <AnimatedRoutes />
+        </GameShell>
+      </HashRouter>
+    </MotionConfig>
   );
 }

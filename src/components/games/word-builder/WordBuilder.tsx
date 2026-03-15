@@ -216,48 +216,46 @@ export function WordBuilder() {
         })}
       </div>
 
-      {/* Floating fuel cells */}
+      {/* Fuel cells grid */}
       <div
-        className="relative h-48 rounded-2xl overflow-hidden"
+        className="rounded-2xl p-4 sm:p-6"
         style={{
           background: 'linear-gradient(165deg, rgba(35,46,90,0.5) 0%, rgba(22,30,66,0.6) 100%)',
           border: '1.5px solid rgba(255,255,255,0.07)',
           boxShadow: 'inset 0 4px 20px rgba(0,0,0,0.3)',
         }}
       >
-        <AnimatePresence>
-          {cells.map(cell => (
-            <motion.button
-              key={cell.id}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{
-                scale: 1,
-                opacity: 1,
-                x: [0, cell.driftX, 0],
-                y: [0, cell.driftY, 0],
-              }}
-              exit={{ scale: 0, opacity: 0 }}
-              transition={{
-                x: { repeat: Infinity, duration: cell.driftDuration },
-                y: { repeat: Infinity, duration: cell.driftDuration + 1 },
-              }}
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.8 }}
-              onClick={() => handleCellClick(cell)}
-              className="absolute w-11 h-11 rounded-full flex items-center justify-center font-english font-bold text-lg cursor-pointer"
-              style={{
-                left: `${cell.x}%`,
-                top: `${cell.y}%`,
-                background: 'linear-gradient(165deg, rgba(91,155,245,0.2), rgba(59,114,219,0.12))',
-                border: '2px solid rgba(91,155,245,0.35)',
-                color: '#5B9BF5',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.25), 0 0 12px rgba(91,155,245,0.1)',
-              }}
-            >
-              {cell.letter}
-            </motion.button>
-          ))}
-        </AnimatePresence>
+        <div className="flex flex-wrap gap-3 justify-center">
+          <AnimatePresence>
+            {cells.map(cell => (
+              <motion.button
+                key={cell.id}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{
+                  scale: 1,
+                  opacity: 1,
+                  y: [0, cell.driftY * 0.5, 0],
+                }}
+                exit={{ scale: 0, opacity: 0 }}
+                transition={{
+                  y: { repeat: Infinity, duration: cell.driftDuration + 1, ease: 'easeInOut' },
+                }}
+                whileHover={{ scale: 1.15 }}
+                whileTap={{ scale: 0.85 }}
+                onClick={() => handleCellClick(cell)}
+                className="w-14 h-14 rounded-2xl flex items-center justify-center font-english font-bold text-xl cursor-pointer"
+                style={{
+                  background: 'linear-gradient(165deg, rgba(91,155,245,0.2), rgba(59,114,219,0.12))',
+                  border: '2px solid rgba(91,155,245,0.35)',
+                  color: '#5B9BF5',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.25), 0 0 12px rgba(91,155,245,0.1)',
+                }}
+              >
+                {cell.letter}
+              </motion.button>
+            ))}
+          </AnimatePresence>
+        </div>
       </div>
 
       <FeedbackOverlay show={showFeedback} correct={isCorrectFeedback} />

@@ -34,7 +34,7 @@ export function SpaceButton({ variant = 'primary', size = 'md', className, child
       disabled={disabled}
       className={cn(
         'ella-btn font-bold cursor-pointer font-hebrew tracking-wide',
-        'disabled:opacity-25 disabled:cursor-not-allowed disabled:shadow-none',
+        'disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none',
         variants[variant],
         sizes[size],
         className

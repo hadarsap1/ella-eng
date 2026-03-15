@@ -48,7 +48,7 @@ export function LetterSelector() {
         <h2 className="text-3xl font-bold font-hebrew mb-2">
           מפת <GlowText color="blue">הכוכבים</GlowText> ⭐
         </h2>
-        <p className="text-white/35 font-hebrew text-sm font-medium">
+        <p className="text-white/60 font-hebrew text-sm font-medium">
           בחר אותיות ללמוד · <span className="text-neon-blue font-english font-bold">{wordCount}</span> מילים זמינות
         </p>
       </motion.div>
@@ -98,9 +98,9 @@ export function LetterSelector() {
                   color: '#5B9BF5',
                   boxShadow: '0 0 16px rgba(91,155,245,0.15)',
                 } : {
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '2px solid rgba(255,255,255,0.04)',
-                  color: 'rgba(255,255,255,0.25)',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '2px solid rgba(255,255,255,0.08)',
+                  color: 'rgba(255,255,255,0.6)',
                 }}
               >
                 {letter}
@@ -115,7 +115,7 @@ export function LetterSelector() {
 
         {/* Selected summary */}
         <div className="mt-5 pt-4 flex items-center justify-between" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-          <span className="text-xs text-white/25 font-hebrew font-medium">
+          <span className="text-xs text-white/60 font-hebrew font-medium">
             {selected.length} / 26 אותיות
           </span>
           <div className="flex gap-1 flex-wrap justify-end max-w-[60%]">

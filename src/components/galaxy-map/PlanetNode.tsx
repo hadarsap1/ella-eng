@@ -76,7 +76,8 @@ export function PlanetNode({ game, index, locked, wordCount, onClick }: Props) {
         >
           {game.name}
         </div>
-        <div className="text-xs sm:text-sm text-white/35 font-hebrew mt-1 font-medium">{game.nameHe}</div>
+        <div className="text-xs sm:text-sm text-white/60 font-hebrew mt-1 font-medium">{game.nameHe}</div>
+        {!locked && <div className="text-xs text-white/40 font-hebrew mt-0.5">{game.description}</div>}
       </div>
 
       {/* Badge */}

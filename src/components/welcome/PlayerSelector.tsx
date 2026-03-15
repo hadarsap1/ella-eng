@@ -12,7 +12,7 @@ interface Props {
 export function PlayerSelector({ players, onSelect }: Props) {
   return (
     <div className="space-y-3">
-      <p className="text-white/35 font-hebrew text-center text-sm mb-4 font-medium">בחר שחקן</p>
+      <p className="text-white/60 font-hebrew text-center text-sm mb-4 font-medium">בחר שחקן</p>
       {players.map((player, i) => {
         const level = getLevel(player.xp);
         return (
@@ -31,7 +31,7 @@ export function PlayerSelector({ players, onSelect }: Props) {
             </div>
             <div className="flex-1 min-w-0">
               <div className="font-bold font-hebrew text-lg text-white/90">{player.name}</div>
-              <div className="text-sm text-white/35 font-hebrew flex items-center gap-1.5 mt-0.5">
+              <div className="text-sm text-white/60 font-hebrew flex items-center gap-1.5 mt-0.5">
                 <span className="text-base">{level.icon}</span>
                 <span>{level.title}</span>
                 <span className="text-white/15">·</span>

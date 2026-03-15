@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import type { Level } from '../../../types/game';
 import { GlowText } from '../../ui/GlowText';
@@ -9,6 +9,13 @@ interface Props {
 
 export function LevelUpModal({ level }: Props) {
   const [visible, setVisible] = useState(true);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (visible && buttonRef.current) {
+      buttonRef.current.focus();
+    }
+  }, [visible]);
 
   if (!visible) return null;
 
@@ -18,7 +25,10 @@ export function LevelUpModal({ level }: Props) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={() => setVisible(false)}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md cursor-pointer"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md"
+      role="dialog"
+      aria-modal="true"
+      aria-label="עלית רמה!"
     >
       <motion.div
         initial={{ scale: 0, rotate: -180 }}
@@ -38,9 +48,15 @@ export function LevelUpModal({ level }: Props) {
         <h3 className="text-3xl font-bold font-hebrew mb-2">
           <GlowText color="gold">עלית רמה!</GlowText>
         </h3>
-        <p className="text-lg font-hebrew text-white/60 mb-1">רמה {level.level}</p>
-        <p className="text-2xl font-bold font-hebrew text-neon-gold">{level.title}</p>
-        <p className="text-xs text-white/20 font-hebrew mt-4">לחץ להמשיך</p>
+        <p className="text-lg font-hebrew text-white/70 mb-1">רמה {level.level}</p>
+        <p className="text-2xl font-bold font-hebrew text-neon-gold mb-5">{level.title}</p>
+        <button
+          ref={buttonRef}
+          onClick={() => setVisible(false)}
+          className="ella-btn ella-btn-gold px-8 py-3 font-hebrew font-bold text-lg cursor-pointer"
+        >
+          🚀 המשך!
+        </button>
       </motion.div>
     </motion.div>
   );
