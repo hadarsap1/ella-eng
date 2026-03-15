@@ -1,6 +1,7 @@
 // ========== Web Audio Context (sound effects) ==========
 
 let ctx: AudioContext | null = null;
+let compressor: DynamicsCompressorNode | null = null;
 
 function getCtx(): AudioContext {
   if (!ctx) {
@@ -13,6 +14,18 @@ function getCtx(): AudioContext {
   return ctx;
 }
 
+// Limiter to prevent clipping when multiple tones overlap (headphone safety)
+function getOutput(): AudioNode {
+  const c = getCtx();
+  if (!compressor) {
+    compressor = c.createDynamicsCompressor();
+    compressor.threshold.setValueAtTime(-6, c.currentTime);
+    compressor.ratio.setValueAtTime(4, c.currentTime);
+    compressor.connect(c.destination);
+  }
+  return compressor;
+}
+
 function playTone(frequency: number, duration: number, type: OscillatorType = 'sine', gain = 0.5) {
   try {
     const c = getCtx();
@@ -23,7 +36,7 @@ function playTone(frequency: number, duration: number, type: OscillatorType = 's
     g.gain.setValueAtTime(gain, c.currentTime);
     g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + duration);
     osc.connect(g);
-    g.connect(c.destination);
+    g.connect(getOutput());
     osc.start();
     osc.stop(c.currentTime + duration);
   } catch (e) {
@@ -31,46 +44,53 @@ function playTone(frequency: number, duration: number, type: OscillatorType = 's
   }
 }
 
+// Warm, gentle "ding-ding" — C5 to E5 major third
 export function playCorrect() {
-  playTone(880, 0.15, 'sine', 0.4);
-  setTimeout(() => playTone(1100, 0.2, 'sine', 0.4), 100);
+  playTone(523, 0.12, 'sine', 0.3);
+  setTimeout(() => playTone(659, 0.18, 'sine', 0.3), 100);
 }
 
+// Gentle descending "bonk" — E4 to C4, soft triangle wave
 export function playWrong() {
-  playTone(200, 0.3, 'sawtooth', 0.3);
+  playTone(330, 0.12, 'triangle', 0.2);
+  setTimeout(() => playTone(262, 0.18, 'triangle', 0.2), 120);
 }
 
 export function playClick() {
-  playTone(600, 0.08, 'sine', 0.2);
+  playTone(600, 0.08, 'sine', 0.15);
 }
 
+// C major arpeggio — non-overlapping for clean sound
 export function playStreak() {
-  playTone(523, 0.1, 'sine', 0.4);
-  setTimeout(() => playTone(659, 0.1, 'sine', 0.4), 80);
-  setTimeout(() => playTone(784, 0.1, 'sine', 0.4), 160);
-  setTimeout(() => playTone(1047, 0.2, 'sine', 0.4), 240);
+  playTone(523, 0.1, 'sine', 0.3);
+  setTimeout(() => playTone(659, 0.1, 'sine', 0.3), 100);
+  setTimeout(() => playTone(784, 0.1, 'sine', 0.3), 200);
+  setTimeout(() => playTone(1047, 0.15, 'sine', 0.3), 300);
 }
 
+// Extended arpeggio with gentle crescendo
 export function playLevelUp() {
-  [523, 659, 784, 1047, 1319].forEach((freq, i) => {
-    setTimeout(() => playTone(freq, 0.2, 'sine', 0.4), i * 120);
+  const notes = [523, 659, 784, 1047];
+  notes.forEach((freq, i) => {
+    setTimeout(() => playTone(freq, 0.2, 'sine', 0.25 + i * 0.03), i * 120);
   });
 }
 
+// Gentle sine sweep (200-800Hz) — soft rocket whoosh
 export function playLaunch() {
   try {
     const c = getCtx();
     const osc = c.createOscillator();
     const g = c.createGain();
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(100, c.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(2000, c.currentTime + 1);
-    g.gain.setValueAtTime(0.4, c.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + 1);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(200, c.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(800, c.currentTime + 0.6);
+    g.gain.setValueAtTime(0.25, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + 0.6);
     osc.connect(g);
-    g.connect(c.destination);
+    g.connect(getOutput());
     osc.start();
-    osc.stop(c.currentTime + 1);
+    osc.stop(c.currentTime + 0.6);
   } catch (e) {
     console.warn('[audio] playLaunch error:', e);
   }
@@ -95,7 +115,7 @@ function unlock() {
   // 2. Prime speechSynthesis with a silent utterance (unlocks it for future use)
   try {
     if (window.speechSynthesis) {
-      const warmup = new SpeechSynthesisUtterance('');
+      const warmup = new SpeechSynthesisUtterance(' ');
       warmup.volume = 0;
       window.speechSynthesis.speak(warmup);
     }
@@ -104,18 +124,20 @@ function unlock() {
   document.removeEventListener('click', unlock, true);
   document.removeEventListener('touchstart', unlock, true);
   document.removeEventListener('keydown', unlock, true);
+  document.removeEventListener('pointerdown', unlock, true);
 }
 
 if (typeof document !== 'undefined') {
   document.addEventListener('click', unlock, true);
   document.addEventListener('touchstart', unlock, true);
   document.addEventListener('keydown', unlock, true);
+  document.addEventListener('pointerdown', unlock, true);
 }
 
 // ========== Text-to-Speech ==========
 // Uses Google Dictionary Oxford pronunciation audio (confirmed working).
 // Falls back to speechSynthesis if dictionary audio unavailable.
-// For multi-word text (sentences), splits into individual words.
+// For multi-word text (sentences), uses native TTS for natural flow.
 
 const DICT_URL = 'https://ssl.gstatic.com/dictionary/static/sounds/oxford';
 
@@ -127,31 +149,35 @@ function playDictWord(word: string): Promise<boolean> {
     const key = word.toLowerCase().trim();
     if (!key) { resolve(false); return; }
 
+    let resolved = false;
+    const done = (val: boolean) => { if (!resolved) { resolved = true; resolve(val); } };
+
     // Check cache
     const cached = audioCache.get(key);
     if (cached) {
       const clone = cached.cloneNode() as HTMLAudioElement;
-      clone.volume = 1;
-      clone.onended = () => resolve(true);
-      clone.onerror = () => resolve(false);
-      clone.play().catch(() => resolve(false));
+      clone.volume = 0.85;
+      clone.onended = () => done(true);
+      clone.onerror = () => done(false);
+      clone.play().catch(() => done(false));
+      setTimeout(() => done(false), 4000);
       return;
     }
 
     const url = `${DICT_URL}/${key}--_us_1.mp3`;
     const audio = new Audio(url);
-    audio.volume = 1;
+    audio.volume = 0.85;
 
     audio.oncanplaythrough = () => {
       audioCache.set(key, audio);
-      audio.play().catch(() => resolve(false));
+      audio.play().catch(() => done(false));
     };
-    audio.onended = () => resolve(true);
-    audio.onerror = () => resolve(false);
+    audio.onended = () => done(true);
+    audio.onerror = () => done(false);
     audio.load();
 
     // Timeout after 4s
-    setTimeout(() => resolve(false), 4000);
+    setTimeout(() => done(false), 4000);
   });
 }
 
@@ -160,30 +186,20 @@ export async function speak(text: string, _lang = 'en-US'): Promise<void> {
 
   const words = text.toLowerCase().trim().split(/\s+/);
 
-  // For single words, play directly
+  // For single words, try dictionary audio then fallback
   if (words.length === 1) {
     const ok = await playDictWord(words[0].replace(/[^a-zA-Z'-]/g, ''));
     if (!ok) {
-      // Fallback: try speechSynthesis
       await speakNativeFallback(text);
     }
     return;
   }
 
-  // For sentences, play words sequentially with short pauses
-  for (const rawWord of words) {
-    const word = rawWord.replace(/[^a-zA-Z'-]/g, '');
-    if (!word) continue;
-    const ok = await playDictWord(word);
-    if (!ok) {
-      // Skip words not in dictionary
-    }
-    // Small pause between words
-    await new Promise(r => setTimeout(r, 150));
-  }
+  // For sentences, use native TTS for natural flow and prosody
+  await speakNativeFallback(text);
 }
 
-// Last resort fallback to native speechSynthesis
+// Native speechSynthesis — slower rate for young learners
 // Window property prevents Chrome from GC-ing the utterance mid-speech
 function speakNativeFallback(text: string): Promise<void> {
   return new Promise((resolve) => {
@@ -193,12 +209,12 @@ function speakNativeFallback(text: string): Promise<void> {
       const u = new SpeechSynthesisUtterance(text);
       (window as unknown as Record<string, unknown>).__ttsGuard = u;
       u.lang = 'en-US';
-      u.rate = 0.85;
+      u.rate = 0.75;
       u.volume = 1;
       u.onend = () => { (window as unknown as Record<string, unknown>).__ttsGuard = null; resolve(); };
       u.onerror = () => { (window as unknown as Record<string, unknown>).__ttsGuard = null; resolve(); };
       window.speechSynthesis.speak(u);
-      setTimeout(() => { (window as unknown as Record<string, unknown>).__ttsGuard = null; resolve(); }, 5000);
+      setTimeout(() => { (window as unknown as Record<string, unknown>).__ttsGuard = null; resolve(); }, 8000);
     } catch {
       resolve();
     }
