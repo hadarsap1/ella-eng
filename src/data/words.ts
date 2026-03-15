@@ -30,7 +30,7 @@ export const allWords: Word[] = [
   { english: "log", hebrew: "בול עץ", letters: ["l", "o", "g"] },
   { english: "fog", hebrew: "ערפל", letters: ["f", "o", "g"] },
   { english: "jog", hebrew: "לרוץ לאט", letters: ["j", "o", "g"] },
-  { english: "hog", hebrew: "חזיר גדול", letters: ["h", "o", "g"] },
+  { english: "hog", hebrew: "חזרזיר", letters: ["h", "o", "g"] },
 
   // CVC - "an" family
   { english: "man", hebrew: "איש", letters: ["m", "a", "n"] },
@@ -46,7 +46,7 @@ export const allWords: Word[] = [
   { english: "pen", hebrew: "עט", letters: ["p", "e", "n"] },
   { english: "ten", hebrew: "עשר", letters: ["t", "e", "n"] },
   { english: "hen", hebrew: "תרנגולת", letters: ["h", "e", "n"] },
-  { english: "den", hebrew: "מאורה", letters: ["d", "e", "n"] },
+  { english: "den", hebrew: "מחבוא", letters: ["d", "e", "n"] },
 
   // CVC - "ed" family
   { english: "bed", hebrew: "מיטה", letters: ["b", "e", "d"] },
@@ -164,8 +164,8 @@ export const allWords: Word[] = [
   { english: "bag", hebrew: "תיק", letters: ["b", "a", "g"] },
 
   // CVC - "eg" family
-  { english: "beg", hebrew: "להתחנן", letters: ["b", "e", "g"] },
-  { english: "peg", hebrew: "יתד", letters: ["p", "e", "g"] },
+  { english: "beg", hebrew: "לבקש", letters: ["b", "e", "g"] },
+  { english: "peg", hebrew: "תפס", letters: ["p", "e", "g"] },
 
   // CVC - "ap" family
   { english: "cap", hebrew: "כיפה", letters: ["c", "a", "p"] },
@@ -179,13 +179,13 @@ export const allWords: Word[] = [
   { english: "cop", hebrew: "שוטר", letters: ["c", "o", "p"] },
 
   // CVC - "ip" family
-  { english: "hip", hebrew: "ירך", letters: ["h", "i", "p"] },
+  { english: "dip", hebrew: "לטבול", letters: ["d", "i", "p"] },
 
   // CVC - "it" family
   { english: "sit", hebrew: "לשבת", letters: ["s", "i", "t"] },
   { english: "hit", hebrew: "להכות", letters: ["h", "i", "t"] },
   { english: "bit", hebrew: "קצת", letters: ["b", "i", "t"] },
-  { english: "pit", hebrew: "בור", letters: ["p", "i", "t"] },
+  { english: "kit", hebrew: "ערכה", letters: ["k", "i", "t"] },
 
   // CVC - "et" family
   { english: "pet", hebrew: "חיית מחמד", letters: ["p", "e", "t"] },
@@ -200,10 +200,10 @@ export const allWords: Word[] = [
 
   // CVC - "ug/og" family
   { english: "bug", hebrew: "חרק", letters: ["b", "u", "g"] },
-  { english: "bog", hebrew: "ביצה", letters: ["b", "o", "g"] },
+  { english: "jug", hebrew: "כד", letters: ["j", "u", "g"] },
 
   // CVC - "ot" extras
-  { english: "bot", hebrew: "רובוט", letters: ["b", "o", "t"] },
+  { english: "cot", hebrew: "מיטת תינוק", letters: ["c", "o", "t"] },
 
   // Past tense / misc used in sentences
   { english: "sang", hebrew: "שר", letters: ["s", "a", "n", "g"] },
@@ -218,7 +218,7 @@ export const similarWordPairs: WordPair[] = [
   { words: [{ english: "man", hebrew: "איש", letters: ["m", "a", "n"] }, { english: "men", hebrew: "אנשים", letters: ["m", "e", "n"] }], difference: "a/e" },
   { words: [{ english: "pan", hebrew: "מחבת", letters: ["p", "a", "n"] }, { english: "pen", hebrew: "עט", letters: ["p", "e", "n"] }], difference: "a/e" },
   { words: [{ english: "bad", hebrew: "רע", letters: ["b", "a", "d"] }, { english: "bed", hebrew: "מיטה", letters: ["b", "e", "d"] }], difference: "a/e" },
-  { words: [{ english: "bag", hebrew: "תיק", letters: ["b", "a", "g"] }, { english: "beg", hebrew: "להתחנן", letters: ["b", "e", "g"] }], difference: "a/e" },
+  { words: [{ english: "bag", hebrew: "תיק", letters: ["b", "a", "g"] }, { english: "beg", hebrew: "לבקש", letters: ["b", "e", "g"] }], difference: "a/e" },
   // a/u
   { words: [{ english: "cat", hebrew: "חתול", letters: ["c", "a", "t"] }, { english: "cut", hebrew: "לחתוך", letters: ["c", "u", "t"] }], difference: "a/u" },
   { words: [{ english: "bat", hebrew: "עטלף", letters: ["b", "a", "t"] }, { english: "but", hebrew: "אבל", letters: ["b", "u", "t"] }], difference: "a/u" },
@@ -235,19 +235,19 @@ export const similarWordPairs: WordPair[] = [
   { words: [{ english: "hit", hebrew: "להכות", letters: ["h", "i", "t"] }, { english: "hat", hebrew: "כובע", letters: ["h", "a", "t"] }], difference: "i/a" },
   { words: [{ english: "pin", hebrew: "סיכה", letters: ["p", "i", "n"] }, { english: "pan", hebrew: "מחבת", letters: ["p", "a", "n"] }], difference: "i/a" },
   // i/e
-  { words: [{ english: "pig", hebrew: "חזיר", letters: ["p", "i", "g"] }, { english: "peg", hebrew: "יתד", letters: ["p", "e", "g"] }], difference: "i/e" },
-  { words: [{ english: "pit", hebrew: "בור", letters: ["p", "i", "t"] }, { english: "pet", hebrew: "חיית מחמד", letters: ["p", "e", "t"] }], difference: "i/e" },
+  { words: [{ english: "pig", hebrew: "חזיר", letters: ["p", "i", "g"] }, { english: "peg", hebrew: "תפס", letters: ["p", "e", "g"] }], difference: "i/e" },
+  { words: [{ english: "kit", hebrew: "ערכה", letters: ["k", "i", "t"] }, { english: "cat", hebrew: "חתול", letters: ["c", "a", "t"] }], difference: "i/a" },
   { words: [{ english: "sit", hebrew: "לשבת", letters: ["s", "i", "t"] }, { english: "set", hebrew: "לקבוע", letters: ["s", "e", "t"] }], difference: "i/e" },
   { words: [{ english: "tin", hebrew: "פח", letters: ["t", "i", "n"] }, { english: "ten", hebrew: "עשר", letters: ["t", "e", "n"] }], difference: "i/e" },
   // u/o
   { words: [{ english: "sun", hebrew: "שמש", letters: ["s", "u", "n"] }, { english: "son", hebrew: "בן", letters: ["s", "o", "n"] }], difference: "u/o" },
   { words: [{ english: "cup", hebrew: "כוס", letters: ["c", "u", "p"] }, { english: "cop", hebrew: "שוטר", letters: ["c", "o", "p"] }], difference: "u/o" },
-  { words: [{ english: "bug", hebrew: "חרק", letters: ["b", "u", "g"] }, { english: "bog", hebrew: "ביצה", letters: ["b", "o", "g"] }], difference: "u/o" },
+  { words: [{ english: "bug", hebrew: "חרק", letters: ["b", "u", "g"] }, { english: "jug", hebrew: "כד", letters: ["j", "u", "g"] }], difference: "b/j" },
   { words: [{ english: "hut", hebrew: "בקתה", letters: ["h", "u", "t"] }, { english: "hot", hebrew: "חם", letters: ["h", "o", "t"] }], difference: "u/o" },
   // i/o
   { words: [{ english: "ship", hebrew: "ספינה", letters: ["s", "h", "i", "p"] }, { english: "shop", hebrew: "חנות", letters: ["s", "h", "o", "p"] }], difference: "i/o" },
-  { words: [{ english: "hip", hebrew: "ירך", letters: ["h", "i", "p"] }, { english: "hop", hebrew: "לקפוץ", letters: ["h", "o", "p"] }], difference: "i/o" },
-  { words: [{ english: "bit", hebrew: "קצת", letters: ["b", "i", "t"] }, { english: "bot", hebrew: "רובוט", letters: ["b", "o", "t"] }], difference: "i/o" },
+  { words: [{ english: "dip", hebrew: "לטבול", letters: ["d", "i", "p"] }, { english: "hop", hebrew: "לדלג", letters: ["h", "o", "p"] }], difference: "d/h" },
+  { words: [{ english: "bit", hebrew: "קצת", letters: ["b", "i", "t"] }, { english: "cot", hebrew: "מיטת תינוק", letters: ["c", "o", "t"] }], difference: "b/c" },
   // Consonant changes
   { words: [{ english: "fish", hebrew: "דג", letters: ["f", "i", "s", "h"] }, { english: "dish", hebrew: "צלחת", letters: ["d", "i", "s", "h"] }], difference: "f/d" },
   { words: [{ english: "cat", hebrew: "חתול", letters: ["c", "a", "t"] }, { english: "bat", hebrew: "עטלף", letters: ["b", "a", "t"] }], difference: "c/b" },
