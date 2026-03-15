@@ -162,7 +162,7 @@ export async function speak(text: string, _lang = 'en-US'): Promise<void> {
 
   // For single words, play directly
   if (words.length === 1) {
-    const ok = await playDictWord(words[0]);
+    const ok = await playDictWord(words[0].replace(/[^a-zA-Z'-]/g, ''));
     if (!ok) {
       // Fallback: try speechSynthesis
       await speakNativeFallback(text);
@@ -171,7 +171,9 @@ export async function speak(text: string, _lang = 'en-US'): Promise<void> {
   }
 
   // For sentences, play words sequentially with short pauses
-  for (const word of words) {
+  for (const rawWord of words) {
+    const word = rawWord.replace(/[^a-zA-Z'-]/g, '');
+    if (!word) continue;
     const ok = await playDictWord(word);
     if (!ok) {
       // Skip words not in dictionary

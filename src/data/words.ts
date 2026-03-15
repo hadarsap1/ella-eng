@@ -29,8 +29,8 @@ export const allWords: Word[] = [
   { english: "dog", hebrew: "כלב", letters: ["d", "o", "g"] },
   { english: "log", hebrew: "בול עץ", letters: ["l", "o", "g"] },
   { english: "fog", hebrew: "ערפל", letters: ["f", "o", "g"] },
-  { english: "jog", hebrew: "לרוץ", letters: ["j", "o", "g"] },
-  { english: "hog", hebrew: "חזיר", letters: ["h", "o", "g"] },
+  { english: "jog", hebrew: "לרוץ לאט", letters: ["j", "o", "g"] },
+  { english: "hog", hebrew: "חזיר גדול", letters: ["h", "o", "g"] },
 
   // CVC - "an" family
   { english: "man", hebrew: "איש", letters: ["m", "a", "n"] },
@@ -174,8 +174,8 @@ export const allWords: Word[] = [
 
   // CVC - "op" family
   { english: "mop", hebrew: "מגב", letters: ["m", "o", "p"] },
-  { english: "top", hebrew: "למעלה", letters: ["t", "o", "p"] },
-  { english: "hop", hebrew: "לקפוץ", letters: ["h", "o", "p"] },
+  { english: "top", hebrew: "חלק עליון", letters: ["t", "o", "p"] },
+  { english: "hop", hebrew: "לדלג", letters: ["h", "o", "p"] },
   { english: "cop", hebrew: "שוטר", letters: ["c", "o", "p"] },
 
   // CVC - "ip" family

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import type { GameResult } from '../../../types/game';
@@ -28,6 +28,9 @@ interface FuelCell {
   letter: string;
   x: number;
   y: number;
+  driftX: number;
+  driftY: number;
+  driftDuration: number;
 }
 
 export function WordBuilder() {
@@ -47,6 +50,8 @@ export function WordBuilder() {
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
   const [wordsPlayed, setWordsPlayed] = useState<string[]>([]);
+  const wordsPlayedRef = useRef(wordsPlayed);
+  wordsPlayedRef.current = wordsPlayed;
   const [complete, setComplete] = useState(false);
   const [launching, setLaunching] = useState(false);
   const [resultData, setResultData] = useState<{
@@ -71,6 +76,9 @@ export function WordBuilder() {
         letter,
         x: 15 + Math.random() * 70,
         y: 10 + Math.random() * 60,
+        driftX: Math.random() * 20 - 10,
+        driftY: Math.random() * 15 - 7,
+        driftDuration: 2 + Math.random() * 2,
       }));
       setCells(allCells);
     }
@@ -86,7 +94,7 @@ export function WordBuilder() {
         xpEarned,
         streak: maxStreak,
         timestamp: Date.now(),
-        wordsPlayed,
+        wordsPlayed: wordsPlayedRef.current,
       };
       const res = addGameResult(result);
       setResultData({ ...res, xpEarned });
@@ -94,7 +102,7 @@ export function WordBuilder() {
     } else {
       setIndex(i => i + 1);
     }
-  }, [index, total, correct, maxStreak, wordsPlayed, addGameResult]);
+  }, [index, total, correct, maxStreak, addGameResult]);
 
   const handleCellClick = (cell: FuelCell) => {
     if (!currentWord || launching) return;
@@ -146,7 +154,13 @@ export function WordBuilder() {
     );
   }
 
-  if (!currentWord) return null;
+  if (!currentWord) {
+    return (
+      <div className="game-screen items-center justify-center">
+        <p className="text-white/50 font-hebrew text-lg">אין מספיק מילים. בחר עוד אותיות 🔤</p>
+      </div>
+    );
+  }
 
   return (
     <div className="game-screen">
@@ -219,13 +233,13 @@ export function WordBuilder() {
               animate={{
                 scale: 1,
                 opacity: 1,
-                x: [0, Math.random() * 20 - 10, 0],
-                y: [0, Math.random() * 15 - 7, 0],
+                x: [0, cell.driftX, 0],
+                y: [0, cell.driftY, 0],
               }}
               exit={{ scale: 0, opacity: 0 }}
               transition={{
-                x: { repeat: Infinity, duration: 2 + Math.random() * 2 },
-                y: { repeat: Infinity, duration: 3 + Math.random() * 2 },
+                x: { repeat: Infinity, duration: cell.driftDuration },
+                y: { repeat: Infinity, duration: cell.driftDuration + 1 },
               }}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.8 }}

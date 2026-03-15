@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import type { Word, GameResult } from '../../../types/game';
@@ -38,7 +38,7 @@ export function PlanetOfWords() {
 
   const [roundWords] = useState(() => shuffle(words).slice(0, ROUNDS));
   const [index, setIndex] = useState(0);
-  const [options, setOptions] = useState(() => makeOptions(roundWords[0], words));
+  const [options, setOptions] = useState(() => roundWords[0] ? makeOptions(roundWords[0], words) : []);
   const [selected, setSelected] = useState<string | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrectFeedback, setIsCorrectFeedback] = useState(false);
@@ -46,6 +46,8 @@ export function PlanetOfWords() {
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
   const [wordsPlayed, setWordsPlayed] = useState<string[]>([]);
+  const wordsPlayedRef = useRef(wordsPlayed);
+  wordsPlayedRef.current = wordsPlayed;
   const [complete, setComplete] = useState(false);
   const [resultData, setResultData] = useState<{
     xpBefore: number; xpAfter: number; xpEarned: number; newAchievements: string[];
@@ -70,7 +72,7 @@ export function PlanetOfWords() {
         xpEarned,
         streak: maxStreak,
         timestamp: Date.now(),
-        wordsPlayed,
+        wordsPlayed: wordsPlayedRef.current,
       };
       const res = addGameResult(result);
       setResultData({ ...res, xpEarned });
@@ -81,7 +83,7 @@ export function PlanetOfWords() {
       setIndex(nextIndex);
       setSelected(null);
     }
-  }, [index, total, correct, maxStreak, wordsPlayed, words, addGameResult]);
+  }, [index, total, correct, maxStreak, words, addGameResult]);
 
   const handleSelect = (value: string) => {
     if (selected) return;
@@ -108,6 +110,14 @@ export function PlanetOfWords() {
       nextRound();
     }, 1200);
   };
+
+  if (!currentWord) {
+    return (
+      <div className="game-screen items-center justify-center">
+        <p className="text-white/50 font-hebrew text-lg">אין מספיק מילים. בחר עוד אותיות 🔤</p>
+      </div>
+    );
+  }
 
   if (complete && resultData) {
     return (

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import type { GameResult, Sentence } from '../../../types/game';
@@ -39,6 +39,8 @@ export function SentenceStation() {
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
   const [wordsPlayed, setWordsPlayed] = useState<string[]>([]);
+  const wordsPlayedRef = useRef(wordsPlayed);
+  wordsPlayedRef.current = wordsPlayed;
   const [complete, setComplete] = useState(false);
   const [checked, setChecked] = useState(false);
   const [resultData, setResultData] = useState<{
@@ -65,7 +67,7 @@ export function SentenceStation() {
         xpEarned,
         streak: maxStreak,
         timestamp: Date.now(),
-        wordsPlayed,
+        wordsPlayed: wordsPlayedRef.current,
       };
       const res = addGameResult(result);
       setResultData({ ...res, xpEarned });
@@ -73,7 +75,7 @@ export function SentenceStation() {
     } else {
       setIndex(i => i + 1);
     }
-  }, [index, total, correct, maxStreak, wordsPlayed, addGameResult]);
+  }, [index, total, correct, maxStreak, addGameResult]);
 
   const handleWordClick = (word: string, fromPlaced: boolean) => {
     if (checked) return;
@@ -127,7 +129,13 @@ export function SentenceStation() {
     );
   }
 
-  if (!currentSentence) return null;
+  if (!currentSentence) {
+    return (
+      <div className="game-screen items-center justify-center">
+        <p className="text-white/50 font-hebrew text-lg">אין מספיק משפטים. בחר עוד אותיות 🔤</p>
+      </div>
+    );
+  }
 
   return (
     <div className="game-screen">

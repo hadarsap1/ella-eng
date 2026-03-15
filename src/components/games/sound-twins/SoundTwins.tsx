@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import type { GameResult, WordPair } from '../../../types/game';
@@ -39,6 +39,8 @@ export function SoundTwins() {
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
   const [wordsPlayed, setWordsPlayed] = useState<string[]>([]);
+  const wordsPlayedRef = useRef(wordsPlayed);
+  wordsPlayedRef.current = wordsPlayed;
   const [complete, setComplete] = useState(false);
   const [resultData, setResultData] = useState<{
     xpBefore: number; xpAfter: number; xpEarned: number; newAchievements: string[];
@@ -62,7 +64,7 @@ export function SoundTwins() {
         xpEarned,
         streak: maxStreak,
         timestamp: Date.now(),
-        wordsPlayed,
+        wordsPlayed: wordsPlayedRef.current,
       };
       const res = addGameResult(result);
       setResultData({ ...res, xpEarned });
@@ -72,7 +74,7 @@ export function SoundTwins() {
       setTargetIdx(Math.random() < 0.5 ? 0 : 1);
       setSelected(null);
     }
-  }, [index, total, correct, maxStreak, wordsPlayed, addGameResult]);
+  }, [index, total, correct, maxStreak, addGameResult]);
 
   const handleSelect = (wordIdx: number) => {
     if (selected !== null) return;
@@ -117,7 +119,13 @@ export function SoundTwins() {
     );
   }
 
-  if (!currentPair) return null;
+  if (!currentPair) {
+    return (
+      <div className="game-screen items-center justify-center">
+        <p className="text-white/50 font-hebrew text-lg">אין מספיק זוגות מילים. בחר עוד אותיות 🔤</p>
+      </div>
+    );
+  }
 
   return (
     <div className="game-screen">

@@ -27,7 +27,7 @@ export function TopBar() {
     >
       {/* Back */}
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => navigate('/galaxy')}
         className="w-11 h-11 flex items-center justify-center rounded-xl ella-btn-ghost cursor-pointer"
         aria-label="חזור"
       >

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2, Heart, Lightbulb } from 'lucide-react';
 import type { GameResult } from '../../../types/game';
@@ -41,6 +41,8 @@ export function ListeningAsteroid() {
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
   const [wordsPlayed, setWordsPlayed] = useState<string[]>([]);
+  const wordsPlayedRef = useRef(wordsPlayed);
+  wordsPlayedRef.current = wordsPlayed;
   const [complete, setComplete] = useState(false);
   const [wordComplete, setWordComplete] = useState(false);
   const [resultData, setResultData] = useState<{
@@ -75,7 +77,7 @@ export function ListeningAsteroid() {
         xpEarned,
         streak: maxStreak,
         timestamp: Date.now(),
-        wordsPlayed,
+        wordsPlayed: wordsPlayedRef.current,
       };
       const res = addGameResult(result);
       setResultData({ ...res, xpEarned });
@@ -83,7 +85,7 @@ export function ListeningAsteroid() {
     } else {
       setIndex(i => i + 1);
     }
-  }, [index, total, correct, maxStreak, wordsPlayed, addGameResult]);
+  }, [index, total, correct, maxStreak, addGameResult]);
 
   const handleKey = (letter: string) => {
     if (!currentWord || wordComplete) return;
@@ -139,7 +141,26 @@ export function ListeningAsteroid() {
     setHintUsed(true);
     const nextLetter = currentWord.english[typed.length]?.toLowerCase();
     if (nextLetter) {
-      setTyped(t => [...t, nextLetter]);
+      const newTyped = [...typed, nextLetter];
+      setTyped(newTyped);
+
+      if (newTyped.length === currentWord.english.length) {
+        setWordComplete(true);
+        setIsCorrectFeedback(true);
+        setShowFeedback(true);
+        setCorrect(c => c + 1);
+        const newStreak = streak + 1;
+        setStreak(newStreak);
+        if (newStreak > maxStreak) setMaxStreak(newStreak);
+        if (newStreak >= 3) playStreak();
+        else playCorrect();
+        setWordsPlayed(prev => [...prev, currentWord.english]);
+
+        setTimeout(() => {
+          setShowFeedback(false);
+          nextRound();
+        }, 1200);
+      }
     }
   };
 
@@ -157,7 +178,13 @@ export function ListeningAsteroid() {
     );
   }
 
-  if (!currentWord) return null;
+  if (!currentWord) {
+    return (
+      <div className="game-screen items-center justify-center">
+        <p className="text-white/50 font-hebrew text-lg">אין מספיק מילים. בחר עוד אותיות 🔤</p>
+      </div>
+    );
+  }
 
   return (
     <div className="game-screen">

@@ -31,8 +31,8 @@ export function MemoryNebula() {
   const { playCorrect, playWrong } = useSoundEffects();
   const addGameResult = usePlayerStore(s => s.addGameResult);
 
-  const pairCount = 6;
-  const [gameWords] = useState(() => shuffle(words).slice(0, pairCount));
+  const [gameWords] = useState(() => shuffle(words).slice(0, 6));
+  const pairCount = gameWords.length;
   const [cards] = useState<Card[]>(() => {
     const c: Card[] = [];
     gameWords.forEach((w: Word) => {
@@ -57,7 +57,7 @@ export function MemoryNebula() {
     const result: GameResult = {
       gameId: 'memory-nebula',
       correct: pairCount,
-      total: attempts,
+      total: pairCount,
       xpEarned,
       streak: 0,
       timestamp: Date.now(),
@@ -106,7 +106,7 @@ export function MemoryNebula() {
     return (
       <GameComplete
         correct={pairCount}
-        total={attempts}
+        total={pairCount}
         xpEarned={resultData.xpEarned}
         maxStreak={0}
         xpBefore={resultData.xpBefore}
